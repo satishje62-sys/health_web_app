@@ -585,16 +585,16 @@ export default function UserProfilePage({ user, onLogout, onNavigateToPage }) {
               <h3 className="modal-title">Edit Profile Information</h3>
 
               {/* Profile Photo Upload Row */}
-              <div className="photo-upload-modal-row flex items-center gap-4 mb-4 p-3 bg-gray-50 rounded-lg">
-                <img src={profileImage} alt="Profile Preview" className="modal-avatar-preview-img w-16 h-16 rounded-full object-cover border-2 border-blue" />
-                <div>
-                  <h4 className="text-sm font-semibold mb-1">Profile Photo</h4>
+              <div className="photo-upload-modal-row">
+                <img src={profileImage} alt="Profile Preview" className="modal-avatar-preview-img" />
+                <div className="photo-upload-text-group">
+                  <h4 className="photo-row-title">Profile Photo</h4>
                   <button 
                     type="button" 
                     className="btn-upload-modal-pic" 
                     onClick={() => document.getElementById('profile-pic-file-input').click()}
                   >
-                    <Camera size={15} /> Upload Photo from Device
+                    <Camera size={15} /> Change Photo from Device
                   </button>
                 </div>
               </div>

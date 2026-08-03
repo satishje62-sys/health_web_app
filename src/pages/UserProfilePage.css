@@ -625,20 +625,99 @@
   cursor: pointer;
 }
 
-/* EDIT PROFILE MODAL */
+/* EDIT PROFILE MODAL & BACKDROP STYLING */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
 .edit-profile-modal-card {
   background: #FFFFFF;
-  border-radius: 28px;
-  padding: 32px;
-  max-width: 480px;
+  border-radius: 24px;
+  padding: 28px;
+  max-width: 500px;
   width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
   position: relative;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.btn-close-modal {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: #F1F5F9;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 16px;
+  font-weight: bold;
+  color: #64748B;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.btn-close-modal:hover {
+  background: #E2E8F0;
+  color: #0F172A;
 }
 
 .edit-form {
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+.photo-upload-modal-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #F8FAFC;
+  border: 1px solid var(--border-color);
+  padding: 12px 16px;
+  border-radius: 16px;
+  margin-bottom: 4px;
+}
+
+.modal-avatar-preview-img {
+  width: 56px !important;
+  height: 56px !important;
+  min-width: 56px !important;
+  min-height: 56px !important;
+  max-width: 56px !important;
+  max-height: 56px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  flex-shrink: 0 !important;
+  border: 2px solid #1E60D5 !important;
+}
+
+.photo-upload-text-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.photo-row-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1E293B;
+  margin: 0;
 }
 
 .form-group label { font-size: 12px; font-weight: 700; color: #475569; }
@@ -668,6 +747,7 @@
   font-weight: 800;
   margin-top: 8px;
   cursor: pointer;
+  border: none;
 }
 
 /* CLICKABLE AVATAR & PHOTO UPLOAD CTA STYLING */
@@ -692,9 +772,9 @@
   background: #EFF6FF;
   color: #1E60D5;
   border: 1px dashed #2563EB;
-  padding: 8px 14px;
-  border-radius: 10px;
-  font-size: 13px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
