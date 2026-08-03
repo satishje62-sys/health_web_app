@@ -2,14 +2,16 @@ import React, { useState } from 'react';
 import { 
   Plus, Search, MapPin, Bell, ChevronDown, Star, CheckCircle2, 
   ThumbsUp, Flag, MoreVertical, Image as ImageIcon, Check, X, 
-  ArrowLeft, Building2, Store, Calendar, Filter, RotateCcw, Edit3
+  ArrowLeft, Building2, Store, Calendar, Filter, RotateCcw, Edit3, Menu
 } from 'lucide-react';
+import SidebarDrawer from '../components/SidebarDrawer';
 import './MyReviewsPage.css';
 
-export default function MyReviewsPage({ user, onNavigateToPage }) {
+export default function MyReviewsPage({ user, onNavigateToPage, onLogout }) {
   const [activeNavTab, setActiveNavTab] = useState('reviews');
   const [userRating, setUserRating] = useState(4);
   const [reviewText, setReviewText] = useState('');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [uploadedPhotos, setUploadedPhotos] = useState([
     'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=300&auto=format&fit=crop&q=80',
     'https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=300&auto=format&fit=crop&q=80',
@@ -129,16 +131,39 @@ export default function MyReviewsPage({ user, onNavigateToPage }) {
 
   return (
     <div className="my-reviews-layout">
+      {/* SLIDE-OUT SIDEBAR DRAWER (Only opens when 3-line button is clicked) */}
+      <SidebarDrawer 
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+        user={user}
+        onLogout={onLogout}
+        onNavigateToPage={onNavigateToPage}
+        activePage="reviews"
+      />
+
       {/* TOP HEADER BAR */}
       <header className="reviews-header">
         <div className="container header-content">
-          <div className="brand-logo-group" onClick={() => onNavigateToPage('home')}>
-            <div className="brand-logo-badge">
-              <Plus className="brand-cross-icon" />
+          <div className="topbar-left-brand-group">
+            {/* 3-LINE HAMBURGER MENU BUTTON */}
+            <button 
+              className="topbar-3line-toggle"
+              onClick={() => setIsSidebarOpen(true)}
+              title="Click to Open Menu Sidebar"
+              aria-label="Open Sidebar Menu"
+            >
+              <Menu size={24} />
+            </button>
+
+            {/* Logo */}
+            <div className="brand-logo-group" onClick={() => onNavigateToPage('home')}>
+              <div className="brand-logo-badge">
+                <Plus className="brand-cross-icon" />
+              </div>
+              <span className="brand-logo-text">
+                Medi<span className="text-green-bright">Near</span>
+              </span>
             </div>
-            <span className="brand-logo-text">
-              Medi<span className="text-green-bright">Near</span>
-            </span>
           </div>
 
           <div className="header-search-box">

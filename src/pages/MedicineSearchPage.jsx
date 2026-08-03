@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { 
   Plus, Search, MapPin, Bell, ChevronDown, RotateCcw, ShieldCheck, 
   Navigation, Store, Check, X, Filter, SlidersHorizontal, Bookmark,
-  ChevronRight, Calendar, Clock, AlertCircle
+  ChevronRight, Calendar, Clock, AlertCircle, Menu
 } from 'lucide-react';
+import SidebarDrawer from '../components/SidebarDrawer';
 import './MedicineSearchPage.css';
 
 export default function MedicineSearchPage({ user, onNavigateToPage, onLogout, onSelectMedicine }) {
@@ -13,6 +14,7 @@ export default function MedicineSearchPage({ user, onNavigateToPage, onLogout, o
   const [sortBy, setSortBy] = useState('Nearest');
   const [reservationModalItem, setReservationModalItem] = useState(null);
   const [reservedSuccess, setReservedSuccess] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Filter States
   const [distanceKm, setDistanceKm] = useState(10);
@@ -133,17 +135,39 @@ export default function MedicineSearchPage({ user, onNavigateToPage, onLogout, o
 
   return (
     <div className="medicine-search-layout">
+      {/* SLIDE-OUT SIDEBAR DRAWER (Only opens when 3-line button is clicked) */}
+      <SidebarDrawer 
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+        user={user}
+        onLogout={onLogout}
+        onNavigateToPage={onNavigateToPage}
+        activePage="search-medicine"
+      />
+
       {/* TOP HEADER NAVIGATION */}
       <header className="search-page-header">
         <div className="container header-content">
-          {/* Logo */}
-          <div className="brand-logo-group" onClick={() => onNavigateToPage('home')}>
-            <div className="brand-logo-badge">
-              <Plus className="brand-cross-icon" />
+          <div className="topbar-left-brand-group">
+            {/* 3-LINE HAMBURGER MENU BUTTON */}
+            <button 
+              className="topbar-3line-toggle"
+              onClick={() => setIsSidebarOpen(true)}
+              title="Click to Open Menu Sidebar"
+              aria-label="Open Sidebar Menu"
+            >
+              <Menu size={24} />
+            </button>
+
+            {/* Logo */}
+            <div className="brand-logo-group" onClick={() => onNavigateToPage('home')}>
+              <div className="brand-logo-badge">
+                <Plus className="brand-cross-icon" />
+              </div>
+              <span className="brand-logo-text">
+                Medi<span className="text-green-bright">Near</span>
+              </span>
             </div>
-            <span className="brand-logo-text">
-              Medi<span className="text-green-bright">Near</span>
-            </span>
           </div>
 
           {/* Navigation Links */}

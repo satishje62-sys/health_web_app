@@ -4,15 +4,17 @@ import {
   Bell, ChevronDown, Pill, Store, Users, TrendingUp, ChevronRight, ChevronLeft, 
   ShieldCheck, Headphones, Bookmark, Plus, ArrowRight, Activity, Clock, CheckCircle2,
   Camera, Edit3, Upload, Phone, X, Home, Download, FileText, Heart, CreditCard,
-  ShoppingBag
+  ShoppingBag, Menu
 } from 'lucide-react';
+import SidebarDrawer from '../components/SidebarDrawer';
 import './UserProfilePage.css';
 
 export default function UserProfilePage({ user, onLogout, onNavigateToPage }) {
   const [activeTab, setActiveTab] = useState('profile');
   const [searchQuery, setSearchQuery] = useState('');
   const [location, setLocation] = useState('Patna, Bihar');
-  
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   // Toggles for Notification Settings
   const [orderUpdates, setOrderUpdates] = useState(true);
   const [offersDiscounts, setOffersDiscounts] = useState(true);
@@ -30,24 +32,6 @@ export default function UserProfilePage({ user, onLogout, onNavigateToPage }) {
     bloodGroup: 'O+',
     location: 'Patna, Bihar'
   });
-
-  // Standard Dashboard Sidebar Items (Consistent across all dashboard pages)
-  const sidebarItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard size={20} /> },
-    { id: 'search-medicine', label: 'Medicine Search', icon: <Search size={20} /> },
-    { id: 'hospitals', label: 'Best Hospital', icon: <Building2 size={20} /> },
-    { id: 'pharmacies', label: 'Near Pharmacy', icon: <Store size={20} /> },
-    { id: 'reviews', label: 'My Review', icon: <Star size={20} /> },
-    { id: 'profile', label: 'Profile', icon: <User size={20} /> },
-    { id: 'emergency', label: 'Emergency', icon: <PhoneCall size={20} /> },
-  ];
-
-  const handleTabClick = (tabId) => {
-    setActiveTab(tabId);
-    if (onNavigateToPage) {
-      onNavigateToPage(tabId);
-    }
-  };
 
   const savedMedicinesData = [
     { name: 'Crocin 650 Tablet', salt: 'Paracetamol 650 mg', price: '₹25.00', bgClass: 'crocin' },
@@ -85,60 +69,41 @@ export default function UserProfilePage({ user, onLogout, onNavigateToPage }) {
 
   return (
     <div className="dashboard-layout">
-      {/* STANDARD DASHBOARD LEFT SIDEBAR */}
-      <aside className="dashboard-sidebar">
-        <div className="sidebar-brand" onClick={() => onNavigateToPage('home')}>
-          <div className="sidebar-logo-badge">
-            <Plus className="sidebar-cross-icon" />
-          </div>
-          <span className="sidebar-logo-text">
-            Medi<span className="text-green-bright">Near</span>
-          </span>
-        </div>
+      {/* SLIDE-OUT SIDEBAR DRAWER (Only opens when 3-line button is clicked) */}
+      <SidebarDrawer 
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+        user={user}
+        onLogout={onLogout}
+        onNavigateToPage={onNavigateToPage}
+        activePage="profile"
+      />
 
-        <nav className="sidebar-nav">
-          {sidebarItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => handleTabClick(item.id)}
-              className={`sidebar-link ${activeTab === item.id ? 'active' : ''}`}
-            >
-              <span className="nav-icon">{item.icon}</span>
-              <span className="nav-label">{item.label}</span>
-            </button>
-          ))}
-
-          <button onClick={onLogout} className="sidebar-link logout-link">
-            <span className="nav-icon"><LogOut size={20} /></span>
-            <span className="nav-label">Log Out</span>
-          </button>
-        </nav>
-
-        <div className="sidebar-emergency-card">
-          <h4>Medical Emergency?</h4>
-          <p>Connect with nearest hospital instantly.</p>
-          <button className="btn-emergency-call" onClick={() => handleTabClick('emergency')}>
-            <PhoneCall size={16} /> Emergency
-          </button>
-          <div className="ambulance-graphic-mini float-animation">🚑</div>
-        </div>
-
-        <div className="sidebar-support-card">
-          <div className="support-header">
-            <Headphones size={20} className="text-blue" />
-            <span>Need Help?</span>
-          </div>
-          <p>Our support team is available 24/7</p>
-          <button className="btn-contact-support" onClick={() => alert('Connecting to 24/7 MediNear Support Chat...')}>
-            Contact Support
-          </button>
-        </div>
-      </aside>
-
-      {/* RIGHT MAIN CONTENT AREA */}
-      <main className="dashboard-main">
-        {/* TOP BAR HEADER */}
+      {/* MAIN CONTENT AREA */}
+      <main className="dashboard-main full-width-main">
+        {/* TOP BAR HEADER WITH 3-LINE MENU TOGGLE */}
         <header className="dashboard-topbar">
+          <div className="topbar-left-brand-group">
+            {/* 3-LINE HAMBURGER MENU BUTTON */}
+            <button 
+              className="topbar-3line-toggle"
+              onClick={() => setIsSidebarOpen(true)}
+              title="Click to Open Menu Sidebar"
+              aria-label="Open Sidebar Menu"
+            >
+              <Menu size={24} />
+            </button>
+
+            {/* Logo */}
+            <div className="brand-logo-group" onClick={() => onNavigateToPage('home')}>
+              <div className="sidebar-logo-badge">
+                <Plus className="sidebar-cross-icon" />
+              </div>
+              <span className="sidebar-logo-text">
+                Medi<span className="text-green-bright">Near</span>
+              </span>
+            </div>
+          </div>
           <div className="topbar-search-box">
             <Search size={18} className="search-icon" />
             <input

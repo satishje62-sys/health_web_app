@@ -50,6 +50,26 @@
   color: var(--primary-blue, #1E60D5);
 }
 
+.topbar-left-brand-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-logo-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.full-width-main {
+  width: 100% !important;
+  max-width: 100% !important;
+  flex: 1;
+}
+
 /* Dashboard Sidebar Mobile Overlay */
 .dashboard-sidebar-overlay {
   position: fixed;

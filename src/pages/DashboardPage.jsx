@@ -4,6 +4,7 @@ import {
   Bell, ChevronDown, Pill, Store, Users, TrendingUp, ChevronRight, ChevronLeft, 
   ShieldCheck, Headphones, Bookmark, Plus, ArrowRight, Activity, Clock, Menu, X
 } from 'lucide-react';
+import SidebarDrawer from '../components/SidebarDrawer';
 import './DashboardPage.css';
 
 export default function DashboardPage({ user, onLogout, onNavigateToPage }) {
@@ -12,24 +13,6 @@ export default function DashboardPage({ user, onLogout, onNavigateToPage }) {
   const [location, setLocation] = useState('Patna, Bihar');
   const [savedItems, setSavedItems] = useState([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  // Sidebar Items matching User Request
-  const sidebarItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard size={20} /> },
-    { id: 'search-medicine', label: 'Medicine Search', icon: <Search size={20} /> },
-    { id: 'hospitals', label: 'Best Hospital', icon: <Building2 size={20} /> },
-    { id: 'pharmacies', label: 'Near Pharmacy', icon: <Store size={20} /> },
-    { id: 'reviews', label: 'My Review', icon: <Star size={20} /> },
-    { id: 'profile', label: 'Profile', icon: <User size={20} /> },
-    { id: 'emergency', label: 'Emergency', icon: <PhoneCall size={20} /> },
-  ];
-
-  const handleTabClick = (tabId) => {
-    setActiveTab(tabId);
-    if (onNavigateToPage) {
-      onNavigateToPage(tabId);
-    }
-  };
 
   const toggleSaveMedicine = (id) => {
     if (savedItems.includes(id)) {
@@ -40,92 +23,42 @@ export default function DashboardPage({ user, onLogout, onNavigateToPage }) {
   };
 
   return (
-    <div className={`dashboard-layout ${isSidebarOpen ? 'sidebar-expanded' : 'sidebar-collapsed'}`}>
-      {/* Sidebar Mobile Overlay */}
-      {isSidebarOpen && (
-        <div 
-          className="dashboard-sidebar-overlay"
-          onClick={() => setIsSidebarOpen(false)}
-        />
-      )}
+    <div className="dashboard-layout">
+      {/* SLIDE-OUT SIDEBAR DRAWER (Only opens when 3-line button is clicked) */}
+      <SidebarDrawer 
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+        user={user}
+        onLogout={onLogout}
+        onNavigateToPage={onNavigateToPage}
+        activePage="dashboard"
+      />
 
-      {/* LEFT SIDEBAR */}
-      <aside className={`dashboard-sidebar ${isSidebarOpen ? 'open' : 'closed'}`}>
-        {/* Logo & 3-Line Toggle Button */}
-        <div className="sidebar-brand">
-          <button 
-            className="sidebar-3line-btn"
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            title="Toggle Sidebar Menu"
-            aria-label="Toggle Sidebar Menu"
-          >
-            {isSidebarOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
-          <div className="sidebar-logo-badge" onClick={() => onNavigateToPage('home')}>
-            <Plus className="sidebar-cross-icon" />
-          </div>
-          <span className="sidebar-logo-text" onClick={() => onNavigateToPage('home')}>
-            Medi<span className="text-green-bright">Near</span>
-          </span>
-        </div>
-
-        {/* Sidebar Nav Items */}
-        <nav className="sidebar-nav">
-          {sidebarItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => handleTabClick(item.id)}
-              className={`sidebar-link ${activeTab === item.id ? 'active' : ''}`}
-              title={item.label}
-            >
-              <span className="nav-icon">{item.icon}</span>
-              <span className="nav-label">{item.label}</span>
-            </button>
-          ))}
-
-          {/* Log Out Button */}
-          <button onClick={onLogout} className="sidebar-link logout-link" title="Log Out">
-            <span className="nav-icon"><LogOut size={20} /></span>
-            <span className="nav-label">Log Out</span>
-          </button>
-        </nav>
-
-        {/* Bottom Sidebar Banner 1: Emergency */}
-        <div className="sidebar-emergency-card">
-          <h4>Medical Emergency?</h4>
-          <p>Connect with nearest hospital instantly.</p>
-          <button className="btn-emergency-call" onClick={() => handleTabClick('emergency')}>
-            <PhoneCall size={16} /> Emergency
-          </button>
-          <div className="ambulance-graphic-mini float-animation">🚑</div>
-        </div>
-
-        {/* Bottom Sidebar Banner 2: Support */}
-        <div className="sidebar-support-card">
-          <div className="support-header">
-            <Headphones size={20} className="text-blue" />
-            <span>Need Help?</span>
-          </div>
-          <p>Our support team is available 24/7</p>
-          <button className="btn-contact-support" onClick={() => alert('Connecting to 24/7 MediNear Support Chat...')}>
-            Contact Support
-          </button>
-        </div>
-      </aside>
-
-      {/* RIGHT MAIN CONTENT AREA */}
-      <main className="dashboard-main">
-        {/* TOP BAR HEADER */}
+      {/* MAIN CONTENT AREA */}
+      <main className="dashboard-main full-width-main">
+        {/* TOP BAR HEADER WITH 3-LINE MENU TOGGLE */}
         <header className="dashboard-topbar">
-          {/* Topbar 3-Line Menu Toggle Button */}
-          <button 
-            className="topbar-3line-toggle"
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            title="Open Sidebar Menu"
-            aria-label="Open Sidebar Menu"
-          >
-            <Menu size={24} />
-          </button>
+          <div className="topbar-left-brand-group">
+            {/* 3-LINE HAMBURGER MENU BUTTON */}
+            <button 
+              className="topbar-3line-toggle"
+              onClick={() => setIsSidebarOpen(true)}
+              title="Click to Open Menu Sidebar"
+              aria-label="Open Sidebar Menu"
+            >
+              <Menu size={24} />
+            </button>
+
+            {/* Logo */}
+            <div className="brand-logo-group" onClick={() => onNavigateToPage('home')}>
+              <div className="sidebar-logo-badge">
+                <Plus className="sidebar-cross-icon" />
+              </div>
+              <span className="sidebar-logo-text">
+                Medi<span className="text-green-bright">Near</span>
+              </span>
+            </div>
+          </div>
 
           {/* Search Input Box */}
           <div className="topbar-search-box">
