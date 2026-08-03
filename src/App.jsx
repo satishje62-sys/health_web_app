@@ -53,6 +53,17 @@ export default function App() {
     setCurrentPage('pharmacy-detail');
   };
 
+  const handleNavigateToPage = (pageId) => {
+    if (pageId === 'home') setCurrentPage('home');
+    else if (pageId === 'dashboard') setCurrentPage('dashboard');
+    else if (pageId === 'medicine-search' || pageId === 'search-medicine') setCurrentPage('medicine-search');
+    else if (pageId === 'hospitals') setCurrentPage('hospitals');
+    else if (pageId === 'pharmacies') setCurrentPage('pharmacies');
+    else if (pageId === 'reviews') setCurrentPage('reviews');
+    else if (pageId === 'profile') setCurrentPage('profile');
+    else if (pageId === 'emergency') setCurrentPage('emergency');
+  };
+
   // Render Page 2: Login Screen
   if (currentPage === 'login') {
     return (
@@ -81,14 +92,7 @@ export default function App() {
       <DashboardPage 
         user={user}
         onLogout={handleLogout}
-        onNavigateToPage={(pageId) => {
-          if (pageId === 'search-medicine') setCurrentPage('medicine-search');
-          else if (pageId === 'hospitals') setCurrentPage('hospitals');
-          else if (pageId === 'pharmacies') setCurrentPage('pharmacies');
-          else if (pageId === 'reviews') setCurrentPage('reviews');
-          else if (pageId === 'profile') setCurrentPage('profile');
-          else if (pageId === 'emergency') setCurrentPage('emergency');
-        }}
+        onNavigateToPage={handleNavigateToPage}
       />
     );
   }
@@ -100,17 +104,7 @@ export default function App() {
         user={user}
         onLogout={handleLogout}
         onSelectMedicine={handleSelectMedicine}
-        onNavigateToPage={(pageId) => {
-          if (pageId === 'home') setCurrentPage('home');
-          else if (pageId === 'dashboard') setCurrentPage('dashboard');
-          else if (pageId === 'medicine-search') setCurrentPage('medicine-search');
-          else if (pageId === 'hospitals') setCurrentPage('hospitals');
-          else if (pageId === 'pharmacies') setCurrentPage('pharmacies');
-          else if (pageId === 'reviews') setCurrentPage('reviews');
-          else if (pageId === 'profile') setCurrentPage('profile');
-          else if (pageId === 'emergency') setCurrentPage('emergency');
-          else alert(`Navigating to ${pageId}...`);
-        }}
+        onNavigateToPage={handleNavigateToPage}
       />
     );
   }
@@ -121,18 +115,9 @@ export default function App() {
       <MedicineDetailPage 
         medicine={selectedMedicine}
         user={user}
+        onLogout={handleLogout}
         onSelectMedicine={handleSelectMedicine}
-        onNavigateToPage={(pageId) => {
-          if (pageId === 'home') setCurrentPage('home');
-          else if (pageId === 'dashboard') setCurrentPage('dashboard');
-          else if (pageId === 'medicine-search') setCurrentPage('medicine-search');
-          else if (pageId === 'hospitals') setCurrentPage('hospitals');
-          else if (pageId === 'pharmacies') setCurrentPage('pharmacies');
-          else if (pageId === 'reviews') setCurrentPage('reviews');
-          else if (pageId === 'profile') setCurrentPage('profile');
-          else if (pageId === 'emergency') setCurrentPage('emergency');
-          else alert(`Navigating to ${pageId}...`);
-        }}
+        onNavigateToPage={handleNavigateToPage}
       />
     );
   }
@@ -142,18 +127,9 @@ export default function App() {
     return (
       <HospitalsListPage 
         user={user}
+        onLogout={handleLogout}
         onSelectHospital={handleSelectHospital}
-        onNavigateToPage={(pageId) => {
-          if (pageId === 'home') setCurrentPage('home');
-          else if (pageId === 'dashboard') setCurrentPage('dashboard');
-          else if (pageId === 'medicine-search') setCurrentPage('medicine-search');
-          else if (pageId === 'hospitals') setCurrentPage('hospitals');
-          else if (pageId === 'pharmacies') setCurrentPage('pharmacies');
-          else if (pageId === 'reviews') setCurrentPage('reviews');
-          else if (pageId === 'profile') setCurrentPage('profile');
-          else if (pageId === 'emergency') setCurrentPage('emergency');
-          else alert(`Navigating to ${pageId}...`);
-        }}
+        onNavigateToPage={handleNavigateToPage}
       />
     );
   }
@@ -164,17 +140,8 @@ export default function App() {
       <HospitalDetailPage 
         hospital={selectedHospital}
         user={user}
-        onNavigateToPage={(pageId) => {
-          if (pageId === 'home') setCurrentPage('home');
-          else if (pageId === 'dashboard') setCurrentPage('dashboard');
-          else if (pageId === 'medicine-search') setCurrentPage('medicine-search');
-          else if (pageId === 'hospitals') setCurrentPage('hospitals');
-          else if (pageId === 'pharmacies') setCurrentPage('pharmacies');
-          else if (pageId === 'reviews') setCurrentPage('reviews');
-          else if (pageId === 'profile') setCurrentPage('profile');
-          else if (pageId === 'emergency') setCurrentPage('emergency');
-          else alert(`Navigating to ${pageId}...`);
-        }}
+        onLogout={handleLogout}
+        onNavigateToPage={handleNavigateToPage}
       />
     );
   }
@@ -184,18 +151,9 @@ export default function App() {
     return (
       <PharmaciesListPage 
         user={user}
+        onLogout={handleLogout}
         onSelectPharmacy={handleSelectPharmacy}
-        onNavigateToPage={(pageId) => {
-          if (pageId === 'home') setCurrentPage('home');
-          else if (pageId === 'dashboard') setCurrentPage('dashboard');
-          else if (pageId === 'medicine-search') setCurrentPage('medicine-search');
-          else if (pageId === 'hospitals') setCurrentPage('hospitals');
-          else if (pageId === 'pharmacies') setCurrentPage('pharmacies');
-          else if (pageId === 'reviews') setCurrentPage('reviews');
-          else if (pageId === 'profile') setCurrentPage('profile');
-          else if (pageId === 'emergency') setCurrentPage('emergency');
-          else alert(`Navigating to ${pageId}...`);
-        }}
+        onNavigateToPage={handleNavigateToPage}
       />
     );
   }
