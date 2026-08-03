@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { 
   Plus, Search, MapPin, Bell, ChevronDown, Star, CheckCircle2, 
   ThumbsUp, Flag, MoreVertical, Image as ImageIcon, Check, X, 
-  ArrowLeft, Building2, Store, Calendar, Filter, RotateCcw, Edit3, Menu
+  ArrowLeft, Building2, Store, Calendar, Filter, RotateCcw, Edit3, Menu, Navigation
 } from 'lucide-react';
 import SidebarDrawer from '../components/SidebarDrawer';
 import './MyReviewsPage.css';
@@ -12,6 +12,91 @@ export default function MyReviewsPage({ user, onNavigateToPage, onLogout }) {
   const [userRating, setUserRating] = useState(4);
   const [reviewText, setReviewText] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // Working Location Selector States & Functions
+  const [location, setLocation] = useState('Bhagalpur, Bihar');
+  const [showLocationModal, setShowLocationModal] = useState(false);
+  const [customLocationInput, setCustomLocationInput] = useState('');
+  const [isDetectingLocation, setIsDetectingLocation] = useState(false);
+
+  const popularCities = [
+    'Bhagalpur, Bihar',
+    'Patna, Bihar',
+    'Gaya, Bihar',
+    'Muzaffarpur, Bihar',
+    'Darbhanga, Bihar',
+    'New Delhi, Delhi',
+    'Mumbai, Maharashtra',
+    'Bangalore, Karnataka',
+    'Kolkata, West Bengal',
+    'Ranchi, Jharkhand',
+    'Lucknow, Uttar Pradesh'
+  ];
+
+  const handleSelectCity = (city) => {
+    setLocation(city);
+    setShowLocationModal(false);
+  };
+
+  const handleSaveCustomLocation = (e) => {
+    e.preventDefault();
+    if (customLocationInput.trim()) {
+      setLocation(customLocationInput.trim());
+      setCustomLocationInput('');
+      setShowLocationModal(false);
+    }
+  };
+
+  const handleDetectCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by your browser.');
+      return;
+    }
+
+    setIsDetectingLocation(true);
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+
+        try {
+          const response = await fetch(
+            `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`
+          );
+          const data = await response.json();
+
+          const city = data.city || data.locality || data.localityInfo?.administrative?.[2]?.name || data.localityInfo?.administrative?.[1]?.name;
+          const state = data.principalSubdivision || data.localityInfo?.administrative?.[0]?.name || 'Bihar';
+
+          if (city) {
+            setLocation(`${city}, ${state}`);
+          } else {
+            const osmResp = await fetch(
+              `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+            );
+            const osmData = await osmResp.json();
+            const addr = osmData.address || {};
+            const detectedCity = addr.city || addr.town || addr.village || addr.county || addr.suburb || 'Bhagalpur';
+            const detectedState = addr.state || 'Bihar';
+            setLocation(`${detectedCity}, ${detectedState}`);
+          }
+        } catch (err) {
+          console.warn('Reverse geocode error:', err);
+          setLocation('Bhagalpur, Bihar');
+        } finally {
+          setIsDetectingLocation(false);
+          setShowLocationModal(false);
+        }
+      },
+      (error) => {
+        console.warn('Geolocation error:', error);
+        setIsDetectingLocation(false);
+        alert('Could not detect live location. Please allow location permissions in your browser or select Bhagalpur manually.');
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    );
+  };
   const [uploadedPhotos, setUploadedPhotos] = useState([
     'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=300&auto=format&fit=crop&q=80',
     'https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=300&auto=format&fit=crop&q=80',
@@ -171,9 +256,15 @@ export default function MyReviewsPage({ user, onNavigateToPage, onLogout }) {
             <input type="text" placeholder="Search hospitals, pharmacies..." />
           </div>
 
-          <div className="header-location-pill">
+          {/* Interactive Location Selector */}
+          <div 
+            className="location-pill-selector" 
+            onClick={() => setShowLocationModal(true)}
+            title="Click to Change Location"
+          >
             <MapPin size={16} className="text-blue" />
-            <span>Patna, Bihar</span>
+            <span>{location}</span>
+            <ChevronDown size={14} className="arrow" />
           </div>
 
           <div className="header-right-controls">
@@ -192,21 +283,12 @@ export default function MyReviewsPage({ user, onNavigateToPage, onLogout }) {
         </div>
       </header>
 
-      {/* SUB-NAVIGATION TAB BAR */}
+      {/* SUB-NAVIGATION BAR */}
       <div className="sub-nav-bar">
-        <div className="container sub-nav-content">
+        <div className="container sub-nav-content flex items-center justify-between">
           <button className="btn-back-link" onClick={() => onNavigateToPage('dashboard')}>
             <ArrowLeft size={16} /> Back to Dashboard
           </button>
-
-          <nav className="sub-nav-tabs">
-            <button onClick={() => onNavigateToPage('dashboard')} className="sub-tab">Overview</button>
-            <button onClick={() => onNavigateToPage('hospitals')} className="sub-tab">Hospitals</button>
-            <button onClick={() => onNavigateToPage('pharmacies')} className="sub-tab">Pharmacies</button>
-            <button className="sub-tab active">My Reviews</button>
-            <button className="sub-tab">Photos</button>
-            <button className="sub-tab">Contact</button>
-          </nav>
 
           <button className="btn-appointment-cta" onClick={() => onNavigateToPage('hospitals')}>
             Appointment
@@ -533,6 +615,98 @@ export default function MyReviewsPage({ user, onNavigateToPage, onLogout }) {
 
         </div>
       </div>
+
+      {/* LOCATION SELECTOR MODAL DIALOG */}
+      {showLocationModal && (
+        <>
+          {/* Backdrop Blur Overlay */}
+          <div 
+            className="location-modal-overlay animate-fade-in"
+            onClick={() => setShowLocationModal(false)}
+          />
+
+          {/* Modal Content Dialog */}
+          <div className="location-modal-card animate-scale-up">
+            {/* Modal Header */}
+            <div className="location-modal-header">
+              <div className="modal-header-brand">
+                <div className="location-badge-icon">
+                  <MapPin size={22} className="text-blue" />
+                </div>
+                <div>
+                  <h3 className="location-modal-title">Select Your Location</h3>
+                  <p className="location-modal-subtitle">
+                    Reviews & nearby medical services will be filtered accordingly
+                  </p>
+                </div>
+              </div>
+              <button 
+                className="location-modal-close" 
+                onClick={() => setShowLocationModal(false)}
+                aria-label="Close Location Modal"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="location-modal-body">
+              {/* Option 1: Detect Live GPS Location */}
+              <button 
+                className="btn-detect-gps"
+                onClick={handleDetectCurrentLocation}
+                disabled={isDetectingLocation}
+              >
+                <Navigation size={18} className={isDetectingLocation ? 'spin-icon' : ''} />
+                <span>
+                  {isDetectingLocation ? 'Detecting your live location...' : 'Use Current Live GPS Location'}
+                </span>
+              </button>
+
+              <div className="location-modal-divider">
+                <span>OR ENTER MANUALLY</span>
+              </div>
+
+              {/* Option 2: Custom Search Input Form */}
+              <form onSubmit={handleSaveCustomLocation} className="location-form">
+                <div className="location-input-group">
+                  <Search size={18} className="location-search-icon" />
+                  <input 
+                    type="text" 
+                    placeholder="Enter city, area or pincode (e.g. Bhagalpur, Patna)..."
+                    value={customLocationInput}
+                    onChange={(e) => setCustomLocationInput(e.target.value)}
+                    autoFocus
+                  />
+                </div>
+                <button 
+                  type="submit" 
+                  className="btn-set-location" 
+                  disabled={!customLocationInput.trim()}
+                >
+                  Set Location
+                </button>
+              </form>
+
+              {/* Option 3: Popular Cities Grid */}
+              <div className="popular-cities-wrapper">
+                <h4 className="popular-cities-title">Popular Cities & Towns</h4>
+                <div className="cities-chip-grid">
+                  {popularCities.map((city) => (
+                    <button 
+                      key={city}
+                      onClick={() => handleSelectCity(city)}
+                      className={`city-chip-btn ${location === city ? 'active' : ''}`}
+                    >
+                      <MapPin size={13} />
+                      <span>{city}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
