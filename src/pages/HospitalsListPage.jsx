@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { 
   Plus, Search, MapPin, Bell, ChevronDown, CheckCircle2, Phone, 
   Navigation, ArrowRight, Filter, RotateCcw, ChevronLeft, ChevronRight,
-  ShieldCheck, Home, Building2, Pill, Activity, User, SlidersHorizontal, Menu
+  ShieldCheck, Home, Building2, Pill, Activity, User, SlidersHorizontal, Menu, X
 } from 'lucide-react';
 import SidebarDrawer from '../components/SidebarDrawer';
 import './HospitalsListPage.css';
