@@ -835,3 +835,253 @@
   .dashboard-layout { flex-direction: column; }
   .dashboard-sidebar { width: 100%; height: auto; position: static; }
 }
+
+/* ========================================================
+   LOCATION SELECTOR MODAL STYLES
+   ======================================================== */
+.location-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 1200;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.location-modal-card {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 520px;
+  background: #FFFFFF;
+  border-radius: 20px;
+  z-index: 1250;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.location-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #E2E8F0;
+  padding-bottom: 16px;
+}
+
+.modal-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.location-badge-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.location-modal-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #0F172A;
+}
+
+.location-modal-subtitle {
+  font-size: 12px;
+  color: #64748B;
+  margin-top: 2px;
+}
+
+.location-modal-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #F1F5F9;
+  border: none;
+  color: #64748B;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.location-modal-close:hover {
+  background: #FFE4E6;
+  color: #E11D48;
+}
+
+.location-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.btn-detect-gps {
+  width: 100%;
+  background: linear-gradient(135deg, #1E60D5 0%, #2563EB 100%);
+  color: #FFFFFF;
+  border: none;
+  padding: 13px 18px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(30, 96, 213, 0.3);
+  transition: all 0.2s ease;
+}
+
+.btn-detect-gps:hover {
+  background: linear-gradient(135deg, #1852B8 0%, #1D4ED8 100%);
+  transform: translateY(-1px);
+}
+
+.spin-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+.location-modal-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #94A3B8;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+}
+
+.location-modal-divider::before,
+.location-modal-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.location-modal-divider span {
+  padding: 0 12px;
+}
+
+.location-form {
+  display: flex;
+  gap: 10px;
+}
+
+.location-input-group {
+  position: relative;
+  flex: 1;
+}
+
+.location-search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94A3B8;
+}
+
+.location-input-group input {
+  width: 100%;
+  padding: 12px 14px 12px 42px;
+  border-radius: 12px;
+  border: 1.5px solid #CBD5E1;
+  font-size: 14px;
+  font-weight: 600;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.location-input-group input:focus {
+  border-color: #1E60D5;
+  box-shadow: 0 0 0 3px rgba(30, 96, 213, 0.12);
+}
+
+.btn-set-location {
+  background: #00C853;
+  color: #FFFFFF;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-set-location:hover:not(:disabled) {
+  background: #00A844;
+}
+
+.btn-set-location:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.popular-cities-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.popular-cities-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #475569;
+}
+
+.cities-chip-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.city-chip-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.city-chip-btn:hover {
+  background: #EFF6FF;
+  color: #1E60D5;
+  border-color: #BFDBFE;
+}
+
+.city-chip-btn.active {
+  background: #1E60D5;
+  color: #FFFFFF;
+  border-color: #1E60D5;
+  font-weight: 700;
+}

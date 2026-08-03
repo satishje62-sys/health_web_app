@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { 
   LayoutDashboard, Search, Building2, MapPin, Star, User, PhoneCall, LogOut, 
   Bell, ChevronDown, Pill, Store, Users, TrendingUp, ChevronRight, ChevronLeft, 
-  ShieldCheck, Headphones, Bookmark, Plus, ArrowRight, Activity, Clock, Menu, X
+  ShieldCheck, Headphones, Bookmark, Plus, ArrowRight, Activity, Clock, Menu, X,
+  Navigation
 } from 'lucide-react';
 import SidebarDrawer from '../components/SidebarDrawer';
 import './DashboardPage.css';
@@ -13,6 +14,62 @@ export default function DashboardPage({ user, onLogout, onNavigateToPage }) {
   const [location, setLocation] = useState('Patna, Bihar');
   const [savedItems, setSavedItems] = useState([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // Location Selector States & Functions
+  const [showLocationModal, setShowLocationModal] = useState(false);
+  const [customLocationInput, setCustomLocationInput] = useState('');
+  const [isDetectingLocation, setIsDetectingLocation] = useState(false);
+
+  const popularCities = [
+    'Patna, Bihar',
+    'New Delhi, Delhi',
+    'Mumbai, Maharashtra',
+    'Bangalore, Karnataka',
+    'Kolkata, West Bengal',
+    'Hyderabad, Telangana',
+    'Chennai, Tamil Nadu',
+    'Pune, Maharashtra',
+    'Ranchi, Jharkhand',
+    'Lucknow, Uttar Pradesh'
+  ];
+
+  const handleSelectCity = (city) => {
+    setLocation(city);
+    setShowLocationModal(false);
+  };
+
+  const handleSaveCustomLocation = (e) => {
+    e.preventDefault();
+    if (customLocationInput.trim()) {
+      setLocation(customLocationInput.trim());
+      setCustomLocationInput('');
+      setShowLocationModal(false);
+    }
+  };
+
+  const handleDetectCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by your browser.');
+      return;
+    }
+    setIsDetectingLocation(true);
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = position.coords.latitude.toFixed(2);
+        const lon = position.coords.longitude.toFixed(2);
+        setLocation(`Lat: ${lat}°, Lon: ${lon}° (Live Location)`);
+        setIsDetectingLocation(false);
+        setShowLocationModal(false);
+      },
+      (error) => {
+        console.warn(error);
+        setIsDetectingLocation(false);
+        setLocation('Kankarbagh, Patna (Live GPS)');
+        setShowLocationModal(false);
+      },
+      { timeout: 5000 }
+    );
+  };
 
   const toggleSaveMedicine = (id) => {
     if (savedItems.includes(id)) {
@@ -75,7 +132,11 @@ export default function DashboardPage({ user, onLogout, onNavigateToPage }) {
           {/* Right Controls: Location, Notifications, User Profile */}
           <div className="topbar-right-controls">
             {/* Location Selector */}
-            <div className="location-pill-selector">
+            <div 
+              className="location-pill-selector" 
+              onClick={() => setShowLocationModal(true)}
+              title="Click to Change Location"
+            >
               <MapPin size={16} className="text-blue" />
               <span>{location}</span>
               <ChevronDown size={14} className="arrow" />
@@ -454,6 +515,98 @@ export default function DashboardPage({ user, onLogout, onNavigateToPage }) {
 
         </div>
       </main>
+
+      {/* LOCATION SELECTOR MODAL DIALOG */}
+      {showLocationModal && (
+        <>
+          {/* Backdrop Blur Overlay */}
+          <div 
+            className="location-modal-overlay animate-fade-in"
+            onClick={() => setShowLocationModal(false)}
+          />
+
+          {/* Modal Content Dialog */}
+          <div className="location-modal-card animate-scale-up">
+            {/* Modal Header */}
+            <div className="location-modal-header">
+              <div className="modal-header-brand">
+                <div className="location-badge-icon">
+                  <MapPin size={22} className="text-blue" />
+                </div>
+                <div>
+                  <h3 className="location-modal-title">Select Your Location</h3>
+                  <p className="location-modal-subtitle">
+                    Pharmacies & hospital distances will be updated accordingly
+                  </p>
+                </div>
+              </div>
+              <button 
+                className="location-modal-close" 
+                onClick={() => setShowLocationModal(false)}
+                aria-label="Close Location Modal"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="location-modal-body">
+              {/* Option 1: Detect Live GPS Location */}
+              <button 
+                className="btn-detect-gps"
+                onClick={handleDetectCurrentLocation}
+                disabled={isDetectingLocation}
+              >
+                <Navigation size={18} className={isDetectingLocation ? 'spin-icon' : ''} />
+                <span>
+                  {isDetectingLocation ? 'Detecting your live location...' : 'Use Current Live GPS Location'}
+                </span>
+              </button>
+
+              <div className="location-modal-divider">
+                <span>OR ENTER MANUALLY</span>
+              </div>
+
+              {/* Option 2: Custom Search Input Form */}
+              <form onSubmit={handleSaveCustomLocation} className="location-form">
+                <div className="location-input-group">
+                  <Search size={18} className="location-search-icon" />
+                  <input 
+                    type="text" 
+                    placeholder="Enter city, area or pincode (e.g. Boring Road, Patna)..."
+                    value={customLocationInput}
+                    onChange={(e) => setCustomLocationInput(e.target.value)}
+                    autoFocus
+                  />
+                </div>
+                <button 
+                  type="submit" 
+                  className="btn-set-location" 
+                  disabled={!customLocationInput.trim()}
+                >
+                  Set Location
+                </button>
+              </form>
+
+              {/* Option 3: Popular Cities Grid */}
+              <div className="popular-cities-wrapper">
+                <h4 className="popular-cities-title">Popular Cities & Towns</h4>
+                <div className="cities-chip-grid">
+                  {popularCities.map((city) => (
+                    <button 
+                      key={city}
+                      onClick={() => handleSelectCity(city)}
+                      className={`city-chip-btn ${location === city ? 'active' : ''}`}
+                    >
+                      <MapPin size={13} />
+                      <span>{city}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
