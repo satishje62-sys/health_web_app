@@ -5,6 +5,61 @@
   background: #F8FAFC;
   font-family: var(--font-family);
   color: var(--text-main);
+  position: relative;
+}
+
+/* 3-Line Hamburger Menu Toggle Button inside Sidebar Header */
+.sidebar-3line-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  color: #1E293B;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-right: 4px;
+}
+
+.sidebar-3line-btn:hover {
+  background: var(--primary-blue-light, #EFF6FF);
+  color: var(--primary-blue, #1E60D5);
+}
+
+/* 3-Line Hamburger Menu Toggle Button in Topbar */
+.topbar-3line-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  color: #1E293B;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-right: 12px;
+}
+
+.topbar-3line-toggle:hover {
+  background: var(--primary-blue-light, #EFF6FF);
+  color: var(--primary-blue, #1E60D5);
+}
+
+/* Dashboard Sidebar Mobile Overlay */
+.dashboard-sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(3px);
+  z-index: 990;
 }
 
 /* LEFT SIDEBAR */
@@ -21,6 +76,8 @@
   height: 100vh;
   overflow-y: auto;
   flex-shrink: 0;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), width 0.3s ease;
+  z-index: 1000;
 }
 
 .sidebar-brand {

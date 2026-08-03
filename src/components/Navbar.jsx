@@ -1,36 +1,59 @@
 import React, { useState } from 'react';
-import { Search, MapPin, Activity, User, LogIn, Menu, X, Shield, Plus } from 'lucide-react';
+import { 
+  Search, MapPin, Activity, User, LogIn, Menu, X, Shield, Plus, 
+  Home, Building2, Store, Star, PhoneCall, Headphones, ArrowRight 
+} from 'lucide-react';
 import './Navbar.css';
 
 export default function Navbar({ onOpenAuth, activePage, setActivePage }) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const navItems = [
-    { id: 'home', label: 'Home' },
-    { id: 'search-medicine', label: 'Search Medicine' },
-    { id: 'hospitals', label: 'Hospitals' },
-    { id: 'about', label: 'About' },
-    { id: 'contact', label: 'Contact' }
+  const sidebarNavItems = [
+    { id: 'home', label: 'Home', icon: <Home size={20} /> },
+    { id: 'search-medicine', label: 'Search Medicine', icon: <Search size={20} /> },
+    { id: 'hospitals', label: 'Best Hospitals', icon: <Building2 size={20} /> },
+    { id: 'pharmacies', label: 'Near Pharmacy', icon: <Store size={20} /> },
+    { id: 'reviews', label: 'My Reviews', icon: <Star size={20} /> },
+    { id: 'profile', label: 'User Profile', icon: <User size={20} /> },
+    { id: 'emergency', label: 'Emergency Services', icon: <PhoneCall size={20} /> },
   ];
+
+  const handleNavClick = (id) => {
+    setActivePage(id);
+    setSidebarOpen(false);
+  };
 
   return (
     <header className="navbar-header">
       <div className="container navbar-container">
-        {/* Logo */}
-        <div className="navbar-brand" onClick={() => setActivePage('home')}>
-          <div className="logo-badge">
-            <div className="logo-icon-wrapper">
-              <Plus className="logo-cross-icon" />
+        {/* Left Section: 3-Line Menu Button & Brand Logo */}
+        <div className="navbar-left-group">
+          {/* 3-Line Hamburger Menu Icon Button */}
+          <button 
+            className="sidebar-toggle-btn"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            aria-label="Toggle Sidebar Menu"
+            title="Open Menu Sidebar"
+          >
+            {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+
+          {/* Logo */}
+          <div className="navbar-brand" onClick={() => setActivePage('home')}>
+            <div className="logo-badge">
+              <div className="logo-icon-wrapper">
+                <Plus className="logo-cross-icon" />
+              </div>
             </div>
+            <span className="logo-text">
+              Medi<span className="text-green">Near</span>
+            </span>
           </div>
-          <span className="logo-text">
-            Medi<span className="text-green">Near</span>
-          </span>
         </div>
 
         {/* Desktop Nav Links */}
         <nav className="desktop-nav">
-          {navItems.map((item) => (
+          {sidebarNavItems.slice(0, 4).map((item) => (
             <button
               key={item.id}
               onClick={() => setActivePage(item.id)}
@@ -56,51 +79,94 @@ export default function Navbar({ onOpenAuth, activePage, setActivePage }) {
           >
             Sign Up
           </button>
-          
-          {/* Mobile menu toggle */}
-          <button 
-            className="mobile-menu-toggle"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
         </div>
       </div>
 
-      {/* Mobile Drawer */}
-      {mobileMenuOpen && (
-        <div className="mobile-drawer animate-fade-in">
-          <div className="mobile-nav-links">
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => {
-                  setActivePage(item.id);
-                  setMobileMenuOpen(false);
-                }}
-                className={`mobile-nav-link ${activePage === item.id ? 'active' : ''}`}
+      {/* Slide-out Sidebar Drawer Overlay & Container */}
+      {sidebarOpen && (
+        <>
+          {/* Backdrop Blur Overlay */}
+          <div 
+            className="sidebar-overlay animate-fade-in"
+            onClick={() => setSidebarOpen(false)}
+          />
+
+          {/* Sidebar Drawer Panel */}
+          <aside className="sidebar-drawer animate-slide-right">
+            {/* Sidebar Header */}
+            <div className="sidebar-drawer-header">
+              <div className="sidebar-brand">
+                <div className="logo-badge">
+                  <Plus className="logo-cross-icon" />
+                </div>
+                <span className="logo-text">
+                  Medi<span className="text-green">Near</span>
+                </span>
+              </div>
+              <button 
+                className="sidebar-close-btn"
+                onClick={() => setSidebarOpen(false)}
+                aria-label="Close Sidebar"
               >
-                {item.label}
+                <X size={22} />
               </button>
-            ))}
-          </div>
-          <div className="mobile-drawer-actions">
-            <button 
-              className="btn-login full-width" 
-              onClick={() => { onOpenAuth('login'); setMobileMenuOpen(false); }}
-            >
-              Login
-            </button>
-            <button 
-              className="btn-signup full-width" 
-              onClick={() => { onOpenAuth('signup'); setMobileMenuOpen(false); }}
-            >
-              Sign Up
-            </button>
-          </div>
-        </div>
+            </div>
+
+            {/* Sidebar Subheading */}
+            <div className="sidebar-section-title">
+              Main Menu & Navigation
+            </div>
+
+            {/* Sidebar Navigation Items */}
+            <div className="sidebar-drawer-links">
+              {sidebarNavItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => handleNavClick(item.id)}
+                  className={`sidebar-drawer-link ${activePage === item.id ? 'active' : ''}`}
+                >
+                  <span className="sidebar-link-icon">{item.icon}</span>
+                  <span className="sidebar-link-text">{item.label}</span>
+                </button>
+              ))}
+            </div>
+
+            {/* Account & Auth Actions inside Sidebar */}
+            <div className="sidebar-drawer-actions">
+              <div className="sidebar-section-title">Account</div>
+              <button 
+                className="btn-login full-width" 
+                onClick={() => { onOpenAuth('login'); setSidebarOpen(false); }}
+              >
+                <LogIn size={18} style={{ marginRight: '8px' }} /> Login
+              </button>
+              <button 
+                className="btn-signup full-width" 
+                onClick={() => { onOpenAuth('signup'); setSidebarOpen(false); }}
+              >
+                Sign Up Now
+              </button>
+            </div>
+
+            {/* Emergency Support Banner in Sidebar */}
+            <div className="sidebar-drawer-footer">
+              <div className="sidebar-support-box">
+                <div className="support-title">
+                  <Headphones size={18} className="text-green" /> 24/7 Health Support
+                </div>
+                <p>Facing a medical emergency? Call urgent services directly.</p>
+                <button 
+                  className="btn-emergency-sidebar"
+                  onClick={() => handleNavClick('emergency')}
+                >
+                  <PhoneCall size={16} /> Emergency 108
+                </button>
+              </div>
+            </div>
+          </aside>
+        </>
       )}
     </header>
   );
 }
+

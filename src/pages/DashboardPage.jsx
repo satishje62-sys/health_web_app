@@ -11,6 +11,7 @@ export default function DashboardPage({ user, onLogout, onNavigateToPage }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [location, setLocation] = useState('Patna, Bihar');
   const [savedItems, setSavedItems] = useState([]);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Sidebar Items matching User Request
   const sidebarItems = [
@@ -39,15 +40,31 @@ export default function DashboardPage({ user, onLogout, onNavigateToPage }) {
   };
 
   return (
-    <div className="dashboard-layout">
+    <div className={`dashboard-layout ${isSidebarOpen ? 'sidebar-expanded' : 'sidebar-collapsed'}`}>
+      {/* Sidebar Mobile Overlay */}
+      {isSidebarOpen && (
+        <div 
+          className="dashboard-sidebar-overlay"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
       {/* LEFT SIDEBAR */}
-      <aside className="dashboard-sidebar">
-        {/* Logo */}
+      <aside className={`dashboard-sidebar ${isSidebarOpen ? 'open' : 'closed'}`}>
+        {/* Logo & 3-Line Toggle Button */}
         <div className="sidebar-brand">
-          <div className="sidebar-logo-badge">
+          <button 
+            className="sidebar-3line-btn"
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            title="Toggle Sidebar Menu"
+            aria-label="Toggle Sidebar Menu"
+          >
+            {isSidebarOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
+          <div className="sidebar-logo-badge" onClick={() => onNavigateToPage('home')}>
             <Plus className="sidebar-cross-icon" />
           </div>
-          <span className="sidebar-logo-text">
+          <span className="sidebar-logo-text" onClick={() => onNavigateToPage('home')}>
             Medi<span className="text-green-bright">Near</span>
           </span>
         </div>
@@ -59,6 +76,7 @@ export default function DashboardPage({ user, onLogout, onNavigateToPage }) {
               key={item.id}
               onClick={() => handleTabClick(item.id)}
               className={`sidebar-link ${activeTab === item.id ? 'active' : ''}`}
+              title={item.label}
             >
               <span className="nav-icon">{item.icon}</span>
               <span className="nav-label">{item.label}</span>
@@ -66,7 +84,7 @@ export default function DashboardPage({ user, onLogout, onNavigateToPage }) {
           ))}
 
           {/* Log Out Button */}
-          <button onClick={onLogout} className="sidebar-link logout-link">
+          <button onClick={onLogout} className="sidebar-link logout-link" title="Log Out">
             <span className="nav-icon"><LogOut size={20} /></span>
             <span className="nav-label">Log Out</span>
           </button>
@@ -99,6 +117,16 @@ export default function DashboardPage({ user, onLogout, onNavigateToPage }) {
       <main className="dashboard-main">
         {/* TOP BAR HEADER */}
         <header className="dashboard-topbar">
+          {/* Topbar 3-Line Menu Toggle Button */}
+          <button 
+            className="topbar-3line-toggle"
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            title="Open Sidebar Menu"
+            aria-label="Open Sidebar Menu"
+          >
+            <Menu size={24} />
+          </button>
+
           {/* Search Input Box */}
           <div className="topbar-search-box">
             <Search size={18} className="search-icon" />

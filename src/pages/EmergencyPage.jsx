@@ -4,7 +4,7 @@ import {
   Bell, ChevronDown, Pill, Store, Users, Navigation, ShieldCheck, 
   AlertTriangle, Phone, Activity, Heart, Clock, ChevronRight, 
   Bookmark, Check, ShieldAlert, Ambulance, Droplet, Headphones, HeadphonesIcon,
-  Plus, Headphones as SupportIcon
+  Plus, Headphones as SupportIcon, Menu, X
 } from 'lucide-react';
 import './EmergencyPage.css';
 
@@ -14,6 +14,7 @@ export default function EmergencyPage({ user, onLogout, onNavigateToPage }) {
   const [location, setLocation] = useState('Patna, Bihar');
   const [showSosModal, setShowSosModal] = useState(false);
   const [savedPage, setSavedPage] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Standard Dashboard Sidebar Items (Consistent across all dashboard pages)
   const sidebarItems = [
