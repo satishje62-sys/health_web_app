@@ -9,12 +9,13 @@ import './MedicineSearchPage.css';
 
 export default function MedicineSearchPage({ user, onNavigateToPage, onLogout, onSelectMedicine }) {
   const [activeNavTab, setActiveNavTab] = useState('medicine-search');
-  const [searchQuery, setSearchQuery] = useState('paracetamol 650');
-  const [showSuggestions, setShowSuggestions] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [sortBy, setSortBy] = useState('Nearest');
   const [reservationModalItem, setReservationModalItem] = useState(null);
   const [reservedSuccess, setReservedSuccess] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [showFiltersSidebar, setShowFiltersSidebar] = useState(false);
 
   // Working Location Selector States & Functions
   const [location, setLocation] = useState('Bhagalpur, Bihar');
@@ -291,165 +292,148 @@ export default function MedicineSearchPage({ user, onNavigateToPage, onLogout, o
       {/* MAIN CONTAINER: LEFT FILTERS + RIGHT SEARCH CONTENT */}
       <div className="container main-content-container">
         
-        {/* LEFT SIDEBAR FILTERS PANEL */}
-        <aside className="filters-sidebar-panel">
-          <div className="filters-panel-header">
-            <h3 className="filters-title">Filters</h3>
-            <button className="btn-reset-all" onClick={resetFilters}>
-              <RotateCcw size={14} /> Reset All
-            </button>
-          </div>
-
-          {/* Filter 1: Distance */}
-          <div className="filter-group-accordion">
-            <div className="filter-group-title">
-              <span>Distance</span>
-              <ChevronDown size={16} />
-            </div>
-            <div className="range-slider-wrapper">
-              <div className="range-labels">
-                <span>0 km</span>
-                <span>20 km</span>
+        {/* LEFT SIDEBAR FILTERS PANEL (Hidden by default, toggleable via Filter button) */}
+        {showFiltersSidebar && (
+          <aside className="filters-sidebar-panel animate-fade-in">
+            <div className="filters-panel-header">
+              <div className="flex items-center gap-2">
+                <Filter size={18} className="text-blue" />
+                <h3 className="filters-title">Filters</h3>
               </div>
-              <input 
-                type="range" 
-                min="1" 
-                max="20" 
-                value={distanceKm} 
-                onChange={(e) => setDistanceKm(Number(e.target.value))}
-                className="custom-range-slider"
-              />
-              <div className="selected-range-badge">Within {distanceKm} km</div>
+              <div className="flex items-center gap-2">
+                <button className="btn-reset-all" onClick={resetFilters}>
+                  <RotateCcw size={14} /> Reset
+                </button>
+                <button className="btn-close-filter-mobile" onClick={() => setShowFiltersSidebar(false)}>
+                  <X size={18} />
+                </button>
+              </div>
             </div>
-          </div>
 
-          {/* Filter 2: Availability */}
-          <div className="filter-group-accordion">
-            <div className="filter-group-title">
-              <span>Availability</span>
-              <ChevronDown size={16} />
-            </div>
-            <div className="filter-checkbox-list">
-              <label className="filter-checkbox-label">
+            {/* Filter 1: Distance */}
+            <div className="filter-group-accordion">
+              <div className="filter-group-title">
+                <span>Distance</span>
+                <ChevronDown size={16} />
+              </div>
+              <div className="range-slider-wrapper">
+                <div className="range-labels">
+                  <span>0 km</span>
+                  <span>20 km</span>
+                </div>
                 <input 
-                  type="checkbox" 
-                  checked={inStockOnly} 
-                  onChange={(e) => setInStockOnly(e.target.checked)}
+                  type="range" 
+                  min="1" 
+                  max="20" 
+                  value={distanceKm} 
+                  onChange={(e) => setDistanceKm(Number(e.target.value))}
+                  className="custom-range-slider"
                 />
-                <span>In Stock</span>
-              </label>
-              <label className="filter-checkbox-label">
-                <input type="checkbox" />
-                <span>Out of Stock</span>
-              </label>
+                <div className="selected-range-badge">Within {distanceKm} km</div>
+              </div>
             </div>
-          </div>
 
-          {/* Filter 3: Generic Medicine */}
-          <div className="filter-group-accordion">
-            <div className="filter-group-title">
-              <span>Generic Medicine</span>
-              <ChevronDown size={16} />
-            </div>
-            <div className="filter-checkbox-list">
-              <label className="filter-checkbox-label">
-                <input type="checkbox" />
-                <span>Show Generic Only</span>
-              </label>
-              <label className="filter-checkbox-label">
-                <input 
-                  type="checkbox" 
-                  checked={includeGeneric} 
-                  onChange={(e) => setIncludeGeneric(e.target.checked)}
-                />
-                <span>Include Generic</span>
-              </label>
-            </div>
-          </div>
-
-          {/* Filter 4: Brand */}
-          <div className="filter-group-accordion">
-            <div className="filter-group-title">
-              <span>Brand</span>
-              <ChevronDown size={16} />
-            </div>
-            <div className="brand-search-box">
-              <Search size={14} className="search-icon" />
-              <input type="text" placeholder="Search brand" />
-            </div>
-            <div className="filter-checkbox-list">
-              {['Dolo', 'Crocin', 'Paracip', 'Calpol'].map((brand) => (
-                <label key={brand} className="filter-checkbox-label">
+            {/* Filter 2: Availability */}
+            <div className="filter-group-accordion">
+              <div className="filter-group-title">
+                <span>Availability</span>
+                <ChevronDown size={16} />
+              </div>
+              <div className="filter-checkbox-list">
+                <label className="filter-checkbox-label">
                   <input 
                     type="checkbox" 
-                    checked={selectedBrands.includes(brand)}
-                    onChange={() => handleBrandToggle(brand)}
+                    checked={inStockOnly} 
+                    onChange={(e) => setInStockOnly(e.target.checked)}
                   />
-                  <span>{brand}</span>
+                  <span>In Stock</span>
                 </label>
-              ))}
-              <button className="link-show-more">Show More v</button>
-            </div>
-          </div>
-
-          {/* Filter 5: Price Range */}
-          <div className="filter-group-accordion">
-            <div className="filter-group-title">
-              <span>Price Range</span>
-              <ChevronDown size={16} />
-            </div>
-            <div className="range-slider-wrapper">
-              <div className="range-labels">
-                <span>₹0</span>
-                <span>₹500</span>
+                <label className="filter-checkbox-label">
+                  <input type="checkbox" />
+                  <span>Out of Stock</span>
+                </label>
               </div>
-              <input 
-                type="range" 
-                min="10" 
-                max="500" 
-                value={priceMax}
-                onChange={(e) => setPriceMax(Number(e.target.value))}
-                className="custom-range-slider blue-track"
-              />
-              <div className="selected-range-badge price">₹0 - ₹{priceMax}</div>
             </div>
-          </div>
 
-          {/* Filter 6: Open Now */}
-          <div className="filter-group-accordion">
-            <div className="filter-group-title">
-              <span>Open Now</span>
-              <ChevronDown size={16} />
+            {/* Filter 3: Generic Medicine */}
+            <div className="filter-group-accordion">
+              <div className="filter-group-title">
+                <span>Generic / Substitutes</span>
+                <ChevronDown size={16} />
+              </div>
+              <div className="filter-checkbox-list">
+                <label className="filter-checkbox-label">
+                  <input 
+                    type="checkbox" 
+                    checked={includeGeneric} 
+                    onChange={(e) => setIncludeGeneric(e.target.checked)}
+                  />
+                  <span>Include Generic Substitutes</span>
+                </label>
+              </div>
             </div>
-            <div className="filter-checkbox-list">
-              <label className="filter-checkbox-label">
+
+            {/* Filter 4: Brand */}
+            <div className="filter-group-accordion">
+              <div className="filter-group-title">
+                <span>Brand</span>
+                <ChevronDown size={16} />
+              </div>
+              <div className="filter-checkbox-list">
+                {['Dolo', 'Crocin', 'Paracip', 'Calpol'].map((brand) => (
+                  <label key={brand} className="filter-checkbox-label">
+                    <input 
+                      type="checkbox" 
+                      checked={selectedBrands.includes(brand)}
+                      onChange={() => handleBrandToggle(brand)}
+                    />
+                    <span>{brand}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Filter 5: Price Range */}
+            <div className="filter-group-accordion">
+              <div className="filter-group-title">
+                <span>Price Range</span>
+                <ChevronDown size={16} />
+              </div>
+              <div className="range-slider-wrapper">
+                <div className="range-labels">
+                  <span>₹0</span>
+                  <span>₹500</span>
+                </div>
                 <input 
-                  type="checkbox" 
-                  checked={openPharmaciesOnly}
-                  onChange={(e) => setOpenPharmaciesOnly(e.target.checked)}
+                  type="range" 
+                  min="10" 
+                  max="500" 
+                  value={priceMax}
+                  onChange={(e) => setPriceMax(Number(e.target.value))}
+                  className="custom-range-slider blue-track"
                 />
-                <span>Show Open Pharmacies Only</span>
-              </label>
+                <div className="selected-range-badge price">₹0 - ₹{priceMax}</div>
+              </div>
             </div>
-          </div>
 
-          {/* Apply Filters Button */}
-          <button className="btn-apply-filters" onClick={() => alert('Filters Applied Successfully!')}>
-            Apply Filters
-          </button>
-        </aside>
+            {/* Apply Filters Button */}
+            <button className="btn-apply-filters" onClick={() => alert('Filters Applied!')}>
+              Apply Filters
+            </button>
+          </aside>
+        )}
 
         {/* RIGHT MAIN SEARCH RESULTS AREA */}
-        <main className="search-results-main">
+        <main className={`search-results-main ${!showFiltersSidebar ? 'full-width-search' : ''}`}>
           
-          {/* TOP BIG SEARCH INPUT BAR */}
+          {/* TOP BIG SEARCH INPUT BAR WITH FILTER TOGGLE */}
           <div className="main-search-input-wrapper">
             <div className="main-search-input-box">
               <Search size={20} className="search-icon-blue" />
               <input
                 type="text"
                 className="search-input-field"
-                placeholder="Search medicines near you..."
+                placeholder="Search medicines, tablets, syrups, or healthcare products..."
                 value={searchQuery}
                 onChange={(e) => {
                   setSearchQuery(e.target.value);
@@ -457,12 +441,23 @@ export default function MedicineSearchPage({ user, onNavigateToPage, onLogout, o
                 }}
                 onFocus={() => setShowSuggestions(true)}
               />
-              <span className="kbd-shortcut-pill">⌘ /</span>
-              <button className="btn-clear-search" onClick={() => setSearchQuery('')}>✕</button>
+              {searchQuery && (
+                <button className="btn-clear-search" onClick={() => setSearchQuery('')}>✕</button>
+              )}
+
+              {/* Filter Sidebar Toggle Button */}
+              <button 
+                className={`btn-toggle-filters-trigger ${showFiltersSidebar ? 'active' : ''}`}
+                onClick={() => setShowFiltersSidebar(!showFiltersSidebar)}
+                title="Toggle Filters Panel"
+              >
+                <SlidersHorizontal size={18} />
+                <span>{showFiltersSidebar ? 'Hide Filters' : 'Filters'}</span>
+              </button>
             </div>
 
             {/* Live Autocomplete Dropdown List */}
-            {showSuggestions && (
+            {showSuggestions && searchQuery.trim() !== '' && (
               <div className="search-autocomplete-dropdown animate-fade-in">
                 {autocompleteList.map((item, idx) => (
                   <div 
@@ -482,106 +477,150 @@ export default function MedicineSearchPage({ user, onNavigateToPage, onLogout, o
             )}
           </div>
 
-          {/* SEARCH META BAR */}
-          <div className="search-meta-bar">
-            <div className="results-query-text">
-              Showing results for <span className="query-highlight">"{searchQuery || 'Paracetamol 650mg Tablet'}"</span>
-            </div>
-            <div className="results-right-controls">
-              <span className="results-count">124 Results Found</span>
-              <div className="sort-dropdown">
-                <span>Sort by: <strong>{sortBy}</strong></span>
-                <ChevronDown size={14} />
+          {/* IF NO SEARCH QUERY HAS BEEN ENTERED: SHOW SEARCH LANDING HERO */}
+          {!searchQuery.trim() ? (
+            <div className="search-initial-empty-hero animate-fade-in">
+              <div className="empty-hero-icon-circle">
+                <Search size={38} className="text-blue" />
+              </div>
+              <h2 className="empty-hero-title">Search Medicines Nearby</h2>
+              <p className="empty-hero-subtitle">
+                Enter a medicine name above or select a popular search below to check real-time stock & prices across pharmacies in {location}.
+              </p>
+
+              <div className="popular-searches-box">
+                <span className="popular-box-label">Popular Searches:</span>
+                <div className="popular-chips-flex">
+                  {[
+                    'Paracetamol 650mg', 
+                    'Dolo 650 Tablet', 
+                    'Amoxicillin 500mg', 
+                    'Vitamin D3 60K', 
+                    'Cetirizine 10mg', 
+                    'Azithromycin 500mg', 
+                    'Pan D Capsule'
+                  ].map((medName) => (
+                    <button 
+                      key={medName}
+                      className="popular-chip-btn"
+                      onClick={() => {
+                        setSearchQuery(medName);
+                        setShowSuggestions(false);
+                      }}
+                    >
+                      <Search size={13} />
+                      <span>{medName}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-
-          {/* 4 SEARCH RESULT PRODUCT CARDS */}
-          <div className="search-results-list-stack">
-            {searchResultsData.map((item) => (
-              <div 
-                key={item.id} 
-                className="search-result-card cursor-pointer"
-                onClick={() => handleMedicineClick(item)}
-              >
-                
-                {/* Left Product Image Box */}
-                <div className="result-product-image">
-                  <div className={`med-pack-mockup ${item.bgClass}`}>
-                    <span className="pack-title">{item.title}</span>
+          ) : (
+            <>
+              {/* SEARCH META BAR */}
+              <div className="search-meta-bar">
+                <div className="results-query-text">
+                  Showing results for <span className="query-highlight">"{searchQuery}"</span>
+                </div>
+                <div className="results-right-controls">
+                  <span className="results-count">124 Results Found</span>
+                  <div className="sort-dropdown">
+                    <span>Sort by: <strong>{sortBy}</strong></span>
+                    <ChevronDown size={14} />
                   </div>
                 </div>
-
-                {/* Center Product Details */}
-                <div className="result-product-details">
-                  <div className="product-title-row">
-                    <h3 className="product-name">{item.title}</h3>
-                  </div>
-                  
-                  <div className="product-formula-row">
-                    <span className="formula-text">{item.formula}</span>
-                    <span className={`stock-badge ${item.inStock ? 'in-stock' : 'out-of-stock'}`}>
-                      ● {item.stockLabel}
-                    </span>
-                  </div>
-
-                  <div className="pharmacy-info-row">
-                    <Store size={16} className="text-blue" />
-                    <span className="pharmacy-name">{item.pharmacy}</span>
-                  </div>
-
-                  <div className="location-status-row">
-                    <span className="dist-text">{item.distance}</span>
-                    <span className="dot-sep">•</span>
-                    <span className={`timing-text ${item.inStock ? 'open' : 'closed'}`}>
-                      {item.timing}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Right Price & Actions */}
-                <div className="result-product-actions">
-                  <div className="price-tag-wrapper">
-                    <span className="item-price">{item.price}</span>
-                    <span className="item-pack-type">{item.pack}</span>
-                  </div>
-
-                  <div className="action-buttons-row">
-                    <button 
-                      className="btn-directions" 
-                      onClick={(e) => { e.stopPropagation(); alert(`Opening GPS Directions to ${item.pharmacy} (${item.distance})...`); }}
-                    >
-                      <Navigation size={14} /> Directions
-                    </button>
-                    <button 
-                      className={`btn-reserve ${!item.inStock ? 'disabled' : ''}`}
-                      disabled={!item.inStock}
-                      onClick={(e) => handleReserveClick(e, item)}
-                    >
-                      Reserve
-                    </button>
-                  </div>
-                </div>
-
-                {/* Right Mini Map Preview Card */}
-                <div className="result-mini-map-card">
-                  <div className="mini-map-bg">
-                    <svg viewBox="0 0 200 120" fill="none">
-                      <path d="M0 40 Q 100 20, 200 60" stroke="#CBD5E1" strokeWidth="12" />
-                      <path d="M50 0 Q 80 80, 150 120" stroke="#CBD5E1" strokeWidth="10" />
-                    </svg>
-                  </div>
-                  <div className={`map-pin-indicator ${item.pinType}`}>
-                    <Plus size={14} />
-                  </div>
-                  <div className="mini-map-distance-badge">
-                    {item.distance}
-                  </div>
-                </div>
-
               </div>
-            ))}
-          </div>
+
+              {/* SEARCH RESULT PRODUCT CARDS */}
+              <div className="search-results-list-stack">
+                {searchResultsData.map((item) => (
+                  <div 
+                    key={item.id} 
+                    className="search-result-card cursor-pointer"
+                    onClick={() => handleMedicineClick(item)}
+                  >
+                    {/* Left Product Image Box */}
+                    <div className="result-product-image">
+                      <div className={`med-pack-mockup ${item.bgClass}`}>
+                        <span className="pack-title">{item.title}</span>
+                      </div>
+                    </div>
+
+                    {/* Center Product Details */}
+                    <div className="result-product-details">
+                      <div className="product-title-row">
+                        <h3 className="product-name">{item.title}</h3>
+                      </div>
+                      
+                      <div className="product-formula-row">
+                        <span className="formula-text">{item.formula}</span>
+                        <span className={`stock-badge ${item.inStock ? 'in-stock' : 'out-of-stock'}`}>
+                          ● {item.stockLabel}
+                        </span>
+                      </div>
+
+                      <div className="pharmacy-info-row">
+                        <Store size={16} className="text-blue" />
+                        <span className="pharmacy-name">{item.pharmacy}</span>
+                      </div>
+
+                      <div className="location-status-row">
+                        <span className="dist-text">{item.distance}</span>
+                        <span className="dot-sep">•</span>
+                        <span className={`timing-text ${item.inStock ? 'open' : 'closed'}`}>
+                          {item.timing}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Right Price & Actions */}
+                    <div className="result-product-actions">
+                      <div className="price-tag-wrapper">
+                        <span className="item-price">{item.price}</span>
+                        <span className="item-pack-type">{item.pack}</span>
+                      </div>
+
+                      <div className="action-buttons-row">
+                        <button 
+                          className="btn-directions" 
+                          onClick={(e) => { e.stopPropagation(); alert(`Opening GPS Directions to ${item.pharmacy} (${item.distance})...`); }}
+                        >
+                          <Navigation size={14} /> Directions
+                        </button>
+                        <button 
+                          className={`btn-reserve ${!item.inStock ? 'disabled' : ''}`}
+                          disabled={!item.inStock}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (item.inStock) setReservationModalItem(item);
+                          }}
+                        >
+                          Reserve Free
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Right Mini Map Preview Card */}
+                    <div className="result-mini-map-card">
+                      <div className="mini-map-bg">
+                        <svg viewBox="0 0 200 120" fill="none">
+                          <path d="M0 40 Q 100 20, 200 60" stroke="#CBD5E1" strokeWidth="12" />
+                          <path d="M50 0 Q 80 80, 150 120" stroke="#CBD5E1" strokeWidth="10" />
+                        </svg>
+                      </div>
+                      <div className={`map-pin-indicator ${item.pinType}`}>
+                        <Plus size={14} />
+                      </div>
+                      <div className="mini-map-distance-badge">
+                        {item.distance}
+                      </div>
+                    </div>
+
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
 
           {/* Bottom Pricing Disclaimer Note */}
           <div className="search-bottom-disclaimer">

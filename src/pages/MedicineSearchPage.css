@@ -762,3 +762,118 @@
   .result-product-actions { align-items: center; }
   .result-mini-map-card { display: none; }
 }
+
+/* Filter Toggle Trigger Button */
+.btn-toggle-filters-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #F1F5F9;
+  border: 1px solid #CBD5E1;
+  color: #334155;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.btn-toggle-filters-trigger:hover,
+.btn-toggle-filters-trigger.active {
+  background: #EFF6FF;
+  border-color: #1E60D5;
+  color: #1E60D5;
+}
+
+.full-width-search {
+  grid-column: 1 / -1;
+}
+
+/* Initial Empty Search Hero Screen */
+.search-initial-empty-hero {
+  background: #FFFFFF;
+  border: 1px solid var(--border-color, #E2E8F0);
+  border-radius: 24px;
+  padding: 48px 32px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.empty-hero-icon-circle {
+  width: 72px;
+  height: 72px;
+  border-radius: 20px;
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-hero-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0;
+}
+
+.empty-hero-subtitle {
+  font-size: 15px;
+  color: #64748B;
+  max-width: 580px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.popular-searches-box {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.popular-box-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #64748B;
+}
+
+.popular-chips-flex {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  max-width: 650px;
+}
+
+.popular-chip-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  color: #334155;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.popular-chip-btn:hover {
+  background: #EFF6FF;
+  color: #1E60D5;
+  border-color: #BFDBFE;
+  transform: translateY(-1px);
+}
