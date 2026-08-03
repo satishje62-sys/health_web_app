@@ -158,18 +158,6 @@ export default function DashboardPage({ user, onLogout, onNavigateToPage }) {
             </div>
           </div>
 
-          {/* Search Input Box */}
-          <div className="topbar-search-box">
-            <Search size={18} className="search-icon" />
-            <input
-              type="text"
-              placeholder="Search medicines, hospitals..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <span className="kbd-shortcut">⌘ /</span>
-          </div>
-
           {/* Right Controls: Location, Notifications, User Profile */}
           <div className="topbar-right-controls">
             {/* Location Selector */}
@@ -198,7 +186,6 @@ export default function DashboardPage({ user, onLogout, onNavigateToPage }) {
               />
               <div className="user-text-info">
                 <span className="user-greeting">Hello, {user?.fullName || user?.name || 'Rahul'}</span>
-                <span className="user-role-badge">{user?.role || 'Premium User'}</span>
               </div>
               <ChevronDown size={14} className="user-arrow" />
             </div>
