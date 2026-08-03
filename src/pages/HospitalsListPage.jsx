@@ -23,6 +23,7 @@ export default function HospitalsListPage({ user, onNavigateToPage, onLogout, on
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [customLocationInput, setCustomLocationInput] = useState('');
   const [isDetectingLocation, setIsDetectingLocation] = useState(false);
+  const [showFiltersSidebar, setShowFiltersSidebar] = useState(false);
 
   const popularCities = [
     'Bhagalpur, Bihar',
@@ -271,123 +272,142 @@ export default function HospitalsListPage({ user, onNavigateToPage, onLogout, on
       {/* MAIN CONTAINER: SIDEBAR FILTERS + RIGHT HOSPITAL LIST */}
       <div className="container main-hospitals-container">
         
-        {/* LEFT SIDEBAR FILTERS PANEL */}
-        <aside className="filters-sidebar">
-          <div className="filters-sidebar-header">
-            <h3>Filters</h3>
-            <button className="btn-reset-link" onClick={resetFilters}>Reset</button>
-          </div>
-
-          {/* Filter 1: Speciality Dropdown */}
-          <div className="filter-block">
-            <label className="filter-label">Speciality</label>
-            <div className="custom-select-box">
-              <select 
-                value={selectedSpeciality} 
-                onChange={(e) => setSelectedSpeciality(e.target.value)}
-              >
-                <option value="All Specialities">All Specialities</option>
-                <option value="Cardiology">Cardiology</option>
-                <option value="Neurology">Neurology</option>
-                <option value="Orthopedics">Orthopedics</option>
-                <option value="Pediatrics">Pediatrics</option>
-                <option value="Gynecology">Gynecology</option>
-              </select>
-              <ChevronDown size={16} className="select-arrow" />
-            </div>
-          </div>
-
-          {/* Filter 2: Rating Pills */}
-          <div className="filter-block">
-            <label className="filter-label">Rating</label>
-            <div className="rating-pills-grid">
-              {['4.0+', '3.5+', '3.0+', '2.0+'].map((rate) => (
-                <button 
-                  key={rate}
-                  className={`rating-pill-btn ${selectedRating === rate ? 'active' : ''}`}
-                  onClick={() => setSelectedRating(rate)}
-                >
-                  {rate} ★
+        {/* LEFT SIDEBAR FILTERS PANEL (Hidden by default, toggleable via Filter button) */}
+        {showFiltersSidebar && (
+          <aside className="filters-sidebar animate-fade-in">
+            <div className="filters-sidebar-header">
+              <div className="flex items-center gap-2">
+                <Filter size={18} className="text-blue" />
+                <h3>Filters</h3>
+              </div>
+              <div className="flex items-center gap-2">
+                <button className="btn-reset-link" onClick={resetFilters}>Reset</button>
+                <button className="btn-close-filter-mobile" onClick={() => setShowFiltersSidebar(false)}>
+                  <X size={18} />
                 </button>
-              ))}
+              </div>
             </div>
-          </div>
 
-          {/* Filter 3: Distance Slider */}
-          <div className="filter-block">
-            <div className="label-with-value">
-              <label className="filter-label">Distance</label>
-              <span className="val-badge">{distanceKm} km</span>
+            {/* Filter 1: Speciality Dropdown */}
+            <div className="filter-block">
+              <label className="filter-label">Speciality</label>
+              <div className="custom-select-box">
+                <select 
+                  value={selectedSpeciality} 
+                  onChange={(e) => setSelectedSpeciality(e.target.value)}
+                >
+                  <option value="All Specialities">All Specialities</option>
+                  <option value="Cardiology">Cardiology</option>
+                  <option value="Neurology">Neurology</option>
+                  <option value="Orthopedics">Orthopedics</option>
+                  <option value="Pediatrics">Pediatrics</option>
+                  <option value="Gynecology">Gynecology</option>
+                </select>
+                <ChevronDown size={16} className="select-arrow" />
+              </div>
             </div>
-            <input 
-              type="range" 
-              min="1" 
-              max="25" 
-              value={distanceKm} 
-              onChange={(e) => setDistanceKm(Number(e.target.value))}
-              className="distance-range-slider"
-            />
-            <div className="range-min-max">
-              <span>0 km</span>
-              <span>25+ km</span>
-            </div>
-          </div>
 
-          {/* Filter 4: Emergency Available */}
-          <div className="filter-block">
-            <label className="filter-label">Emergency Available</label>
-            <label className="checkbox-item">
+            {/* Filter 2: Rating Pills */}
+            <div className="filter-block">
+              <label className="filter-label">Rating</label>
+              <div className="rating-pills-grid">
+                {['4.0+', '3.5+', '3.0+', '2.0+'].map((rate) => (
+                  <button 
+                    key={rate}
+                    className={`rating-pill-btn ${selectedRating === rate ? 'active' : ''}`}
+                    onClick={() => setSelectedRating(rate)}
+                  >
+                    {rate} ★
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Filter 3: Distance Slider */}
+            <div className="filter-block">
+              <div className="label-with-value">
+                <label className="filter-label">Distance</label>
+                <span className="val-badge">{distanceKm} km</span>
+              </div>
               <input 
-                type="checkbox" 
-                checked={emergencyOnly}
-                onChange={(e) => setEmergencyOnly(e.target.checked)}
+                type="range" 
+                min="1" 
+                max="25" 
+                value={distanceKm} 
+                onChange={(e) => setDistanceKm(Number(e.target.value))}
+                className="distance-range-slider"
               />
-              <span>Available Now</span>
-            </label>
-          </div>
+              <div className="range-min-max">
+                <span>0 km</span>
+                <span>25 km</span>
+              </div>
+            </div>
 
-          {/* Filter 5: Hospital Type */}
-          <div className="filter-block">
-            <label className="filter-label">Hospital Type</label>
-            <div className="checkbox-list">
-              <label className="checkbox-item">
+            {/* Filter 4: Emergency 24/7 */}
+            <div className="filter-block">
+              <label className="toggle-switch-row">
+                <span>24/7 Emergency Only</span>
                 <input 
                   type="checkbox" 
-                  checked={hospitalType.government}
-                  onChange={(e) => setHospitalType({ ...hospitalType, government: e.target.checked })}
+                  checked={emergencyOnly}
+                  onChange={(e) => setEmergencyOnly(e.target.checked)}
                 />
-                <span>Government</span>
-              </label>
-              <label className="checkbox-item">
-                <input 
-                  type="checkbox" 
-                  checked={hospitalType.private}
-                  onChange={(e) => setHospitalType({ ...hospitalType, private: e.target.checked })}
-                />
-                <span>Private</span>
-              </label>
-              <label className="checkbox-item">
-                <input 
-                  type="checkbox" 
-                  checked={hospitalType.trust}
-                  onChange={(e) => setHospitalType({ ...hospitalType, trust: e.target.checked })}
-                />
-                <span>Trust / NGO</span>
               </label>
             </div>
-          </div>
 
-          {/* Apply Filters CTA */}
-          <button className="btn-apply-filters" onClick={() => alert('Filters applied successfully!')}>
-            <Filter size={16} /> Apply Filters
-          </button>
-        </aside>
+            {/* Filter 5: Hospital Type */}
+            <div className="filter-block">
+              <label className="filter-label">Hospital Type</label>
+              <div className="checkbox-list">
+                <label className="checkbox-item">
+                  <input 
+                    type="checkbox" 
+                    checked={hospitalType.government}
+                    onChange={(e) => setHospitalType({ ...hospitalType, government: e.target.checked })}
+                  />
+                  <span>Government</span>
+                </label>
+                <label className="checkbox-item">
+                  <input 
+                    type="checkbox" 
+                    checked={hospitalType.private}
+                    onChange={(e) => setHospitalType({ ...hospitalType, private: e.target.checked })}
+                  />
+                  <span>Private</span>
+                </label>
+                <label className="checkbox-item">
+                  <input 
+                    type="checkbox" 
+                    checked={hospitalType.trust}
+                    onChange={(e) => setHospitalType({ ...hospitalType, trust: e.target.checked })}
+                  />
+                  <span>Trust / NGO</span>
+                </label>
+              </div>
+            </div>
+
+            {/* Apply Filters CTA */}
+            <button className="btn-apply-filters" onClick={() => alert('Filters applied successfully!')}>
+              <Filter size={16} /> Apply Filters
+            </button>
+          </aside>
+        )}
 
         {/* RIGHT MAIN HOSPITAL CARDS STACK */}
-        <main className="hospitals-main-content">
+        <main className={`hospitals-main-content ${!showFiltersSidebar ? 'full-width-search' : ''}`}>
           
           {/* SORT & FILTER CONTROLS BAR */}
           <div className="sort-controls-bar">
+            {/* Filter Sidebar Toggle Button */}
+            <button 
+              className={`btn-toggle-filters-trigger ${showFiltersSidebar ? 'active' : ''}`}
+              onClick={() => setShowFiltersSidebar(!showFiltersSidebar)}
+              title="Toggle Filters Panel"
+            >
+              <SlidersHorizontal size={18} />
+              <span>{showFiltersSidebar ? 'Hide Filters' : 'Filters'}</span>
+            </button>
+
             <div className="sort-dropdown-box">
               <span>Sort by: </span>
               <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
@@ -397,10 +417,6 @@ export default function HospitalsListPage({ user, onNavigateToPage, onLogout, on
               </select>
               <ChevronDown size={14} />
             </div>
-
-            <button className="btn-mobile-filter" aria-label="Filters">
-              <SlidersHorizontal size={18} />
-            </button>
           </div>
 
           {/* 4 HOSPITAL LIST CARDS */}
