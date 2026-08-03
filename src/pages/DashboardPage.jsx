@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { 
   LayoutDashboard, Search, Building2, MapPin, Star, User, PhoneCall, LogOut, 
   Bell, ChevronDown, Pill, Store, Users, TrendingUp, ChevronRight, ChevronLeft, 
-  ShieldCheck, Headphones, Bookmark, Plus, ArrowRight, Activity, Clock
+  ShieldCheck, Headphones, Bookmark, Plus, ArrowRight, Activity, Clock, Menu, X
 } from 'lucide-react';
 import './DashboardPage.css';
 

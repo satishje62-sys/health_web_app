@@ -22,21 +22,21 @@ export default function HomePage({ onNavigateToLogin, onNavigateToSignUp }) {
   return (
     <div className="homepage-wrapper">
       {/* Header Navigation */}
-      <Navbar 
-        onOpenAuth={handleOpenAuth} 
-        activePage={activePage} 
+      <Navbar
+        onOpenAuth={handleOpenAuth}
+        activePage={activePage}
         setActivePage={(pageId) => {
           if (pageId === 'home') {
             setActivePage('home');
           } else {
             onNavigateToLogin();
           }
-        }} 
+        }}
       />
 
       {/* Hero Section */}
-      <HeroSection 
-        onSearchSelect={() => onNavigateToLogin()} 
+      <HeroSection
+        onSearchSelect={() => onNavigateToLogin()}
       />
 
       {/* Section 2: Features 3x2 Grid */}
