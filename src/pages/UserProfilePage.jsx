@@ -21,8 +21,12 @@ export default function UserProfilePage({ user, onLogout, onNavigateToPage }) {
   const [healthTips, setHealthTips] = useState(true);
   const [reminders, setReminders] = useState(false);
 
-  // Edit Profile Modal
+  // Edit Profile Modal & Profile Avatar Image State
   const [showEditModal, setShowEditModal] = useState(false);
+  const [profileImage, setProfileImage] = useState(
+    user?.avatar || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80'
+  );
+
   const [userProfileData, setUserProfileData] = useState({
     fullName: user?.fullName || user?.name || 'Rahul Kumar',
     email: user?.email || 'rahulkumar@gmail.com',
@@ -32,6 +36,23 @@ export default function UserProfilePage({ user, onLogout, onNavigateToPage }) {
     bloodGroup: 'O+',
     location: 'Patna, Bihar'
   });
+
+  const handleProfileImageUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        alert('Please select a valid image file (JPG, PNG, WEBP, etc.).');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target?.result) {
+          setProfileImage(event.target.result);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const savedMedicinesData = [
     { name: 'Crocin 650 Tablet', salt: 'Paracetamol 650 mg', price: '₹25.00', bgClass: 'crocin' },
@@ -129,18 +150,27 @@ export default function UserProfilePage({ user, onLogout, onNavigateToPage }) {
 
             <div className="user-profile-menu">
               <img 
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80" 
+                src={profileImage} 
                 alt="User Avatar" 
                 className="user-avatar"
               />
               <div className="user-text-info">
                 <span className="user-greeting">Hello, {userProfileData.fullName.split(' ')[0]}</span>
-                <span className="user-role-badge">Premium User</span>
+                <span className="user-role-badge">User</span>
               </div>
               <ChevronDown size={14} className="user-arrow" />
             </div>
           </div>
         </header>
+
+        {/* HIDDEN FILE INPUT FOR MEDIA/GALLERY PROFILE IMAGE SELECTION */}
+        <input 
+          type="file" 
+          id="profile-pic-file-input" 
+          accept="image/*" 
+          style={{ display: 'none' }} 
+          onChange={handleProfileImageUpload} 
+        />
 
         {/* PROFILE PAGE CONTENT BODY */}
         <div className="profile-body-container">
@@ -151,13 +181,17 @@ export default function UserProfilePage({ user, onLogout, onNavigateToPage }) {
               
               {/* 1. TOP USER PROFILE HERO CARD */}
               <div className="user-profile-hero-card">
-                <div className="user-avatar-upload-box">
+                <div 
+                  className="user-avatar-upload-box clickable-avatar"
+                  onClick={() => document.getElementById('profile-pic-file-input').click()}
+                  title="Click to Upload Profile Picture from device"
+                >
                   <img 
-                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80" 
+                    src={profileImage} 
                     alt={userProfileData.fullName} 
                     className="hero-avatar-img"
                   />
-                  <div className="camera-badge-btn" onClick={() => alert('Change Profile Picture')}>
+                  <div className="camera-badge-btn" title="Upload Photo">
                     <Camera size={14} />
                   </div>
                 </div>
@@ -549,6 +583,21 @@ export default function UserProfilePage({ user, onLogout, onNavigateToPage }) {
 
             <form onSubmit={handleSaveEditProfile} className="edit-form">
               <h3 className="modal-title">Edit Profile Information</h3>
+
+              {/* Profile Photo Upload Row */}
+              <div className="photo-upload-modal-row flex items-center gap-4 mb-4 p-3 bg-gray-50 rounded-lg">
+                <img src={profileImage} alt="Profile Preview" className="modal-avatar-preview-img w-16 h-16 rounded-full object-cover border-2 border-blue" />
+                <div>
+                  <h4 className="text-sm font-semibold mb-1">Profile Photo</h4>
+                  <button 
+                    type="button" 
+                    className="btn-upload-modal-pic" 
+                    onClick={() => document.getElementById('profile-pic-file-input').click()}
+                  >
+                    <Camera size={15} /> Upload Photo from Device
+                  </button>
+                </div>
+              </div>
 
               <div className="form-group">
                 <label>Full Name</label>
