@@ -195,352 +195,110 @@ export default function DashboardPage({ user, onLogout, onNavigateToPage }) {
           </div>
         </header>
 
-        {/* DASHBOARD BODY CONTENT */}
+        {/* DASHBOARD BODY CONTENT - ONLY RECENT SEARCHES */}
         <div className="dashboard-body-container">
           
-          {/* TOP 4 STAT CARDS ROW */}
-          <div className="metrics-cards-grid">
-            {/* Card 1: Medicines Found */}
-            <div className="metric-card">
-              <div className="metric-icon-circle blue">
-                <Pill size={24} />
-              </div>
-              <div className="metric-info">
-                <span className="metric-title">Medicines Found</span>
-                <h3 className="metric-value">2,540+</h3>
-                <span className="metric-trend green">↑ 12% this week</span>
-              </div>
+          {/* Welcome Subheader */}
+          <div className="dashboard-welcome-header">
+            <div>
+              <h2 className="welcome-title">Welcome back, {user?.fullName || user?.name || 'Rahul'} 👋</h2>
+              <p className="welcome-subtitle">View and manage your recent health and medicine search history.</p>
             </div>
-
-            {/* Card 2: Nearby Pharmacies */}
-            <div className="metric-card">
-              <div className="metric-icon-circle green">
-                <Store size={24} />
-              </div>
-              <div className="metric-info">
-                <span className="metric-title">Nearby Pharmacies</span>
-                <h3 className="metric-value">128</h3>
-                <span className="metric-trend green">↑ 8% this week</span>
-              </div>
-            </div>
-
-            {/* Card 3: Top Hospitals */}
-            <div className="metric-card">
-              <div className="metric-icon-circle purple">
-                <Building2 size={24} />
-              </div>
-              <div className="metric-info">
-                <span className="metric-title">Top Hospitals</span>
-                <h3 className="metric-value">86</h3>
-                <span className="metric-trend green">↑ 10% this week</span>
-              </div>
-            </div>
-
-            {/* Card 4: Reviews */}
-            <div className="metric-card">
-              <div className="metric-icon-circle orange">
-                <Users size={24} />
-              </div>
-              <div className="metric-info">
-                <span className="metric-title">Reviews</span>
-                <h3 className="metric-value">1,248</h3>
-                <span className="metric-trend green">↑ 15% this week</span>
-              </div>
-            </div>
+            <button className="btn-new-search" onClick={() => onNavigateToPage('search-medicine')}>
+              <Search size={18} /> Perform New Search
+            </button>
           </div>
 
-          {/* MIDDLE ROW: 3 COLUMNS (Recent Searches, Nearby Pharmacies, Top Rated Hospitals) */}
-          <div className="middle-columns-grid">
-            
-            {/* COLUMN 1: RECENT SEARCHES */}
-            <div className="dashboard-column-card">
-              <div className="column-card-header">
-                <h3>Recent Searches</h3>
-                <button className="link-view-all">View All</button>
-              </div>
-              <div className="recent-searches-list">
-                <div className="recent-search-item">
-                  <div className="search-item-icon blue"><Pill size={18} /></div>
-                  <div className="search-item-info">
-                    <h4>Paracetamol 650mg</h4>
-                    <span>Searched 10 mins ago</span>
-                  </div>
-                  <ChevronRight size={16} className="arrow-right" />
+          {/* DEDICATED RECENT SEARCHES CONTAINER */}
+          <div className="recent-searches-full-card">
+            <div className="card-top-header">
+              <div className="header-title-group">
+                <div className="icon-search-badge">
+                  <Search size={22} className="text-blue" />
                 </div>
-
-                <div className="recent-search-item">
-                  <div className="search-item-icon green"><Pill size={18} /></div>
-                  <div className="search-item-info">
-                    <h4>Amoxicillin 500mg</h4>
-                    <span>Searched 2 hours ago</span>
-                  </div>
-                  <ChevronRight size={16} className="arrow-right" />
-                </div>
-
-                <div className="recent-search-item">
-                  <div className="search-item-icon orange"><Pill size={18} /></div>
-                  <div className="search-item-info">
-                    <h4>Vitamin D3 Tablet</h4>
-                    <span>Searched yesterday</span>
-                  </div>
-                  <ChevronRight size={16} className="arrow-right" />
-                </div>
-
-                <div className="recent-search-item">
-                  <div className="search-item-icon purple"><Pill size={18} /></div>
-                  <div className="search-item-info">
-                    <h4>Cetirizine 10mg</h4>
-                    <span>Searched 2 days ago</span>
-                  </div>
-                  <ChevronRight size={16} className="arrow-right" />
+                <div>
+                  <h3>Recent Searches</h3>
+                  <p>Your search activity across medicines, hospitals, and pharmacies</p>
                 </div>
               </div>
-            </div>
-
-            {/* COLUMN 2: NEARBY PHARMACIES */}
-            <div className="dashboard-column-card">
-              <div className="column-card-header">
-                <h3>Nearby Pharmacies</h3>
-                <button className="link-view-all" onClick={() => handleTabClick('pharmacies')}>View All</button>
-              </div>
-              <div className="places-list">
-                <div className="place-list-item">
-                  <img src="https://images.unsplash.com/photo-1586015555751-63bb77f4322a?w=120&auto=format&fit=crop&q=80" alt="WellCare" className="place-thumb" />
-                  <div className="place-list-info">
-                    <h4>WellCare Pharmacy</h4>
-                    <div className="place-subtext">
-                      <span>0.3 km away</span> • <span className="open-green">Open</span>
-                    </div>
-                  </div>
-                  <div className="place-rating-badge">★ 4.7</div>
-                </div>
-
-                <div className="place-list-item">
-                  <img src="https://images.unsplash.com/photo-1576602976047-174e57a47881?w=120&auto=format&fit=crop&q=80" alt="Apollo" className="place-thumb" />
-                  <div className="place-list-info">
-                    <h4>Apollo Pharmacy</h4>
-                    <div className="place-subtext">
-                      <span>0.6 km away</span> • <span className="open-green">Open</span>
-                    </div>
-                  </div>
-                  <div className="place-rating-badge">★ 4.5</div>
-                </div>
-
-                <div className="place-list-item">
-                  <img src="https://images.unsplash.com/photo-1563213126-a4273aed2016?w=120&auto=format&fit=crop&q=80" alt="MedPlus" className="place-thumb" />
-                  <div className="place-list-info">
-                    <h4>MedPlus Pharmacy</h4>
-                    <div className="place-subtext">
-                      <span>0.8 km away</span> • <span className="open-green">Open</span>
-                    </div>
-                  </div>
-                  <div className="place-rating-badge">★ 4.3</div>
-                </div>
-
-                <div className="place-list-item">
-                  <img src="https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=120&auto=format&fit=crop&q=80" alt="HealthFirst" className="place-thumb" />
-                  <div className="place-list-info">
-                    <h4>HealthFirst Pharmacy</h4>
-                    <div className="place-subtext">
-                      <span>1.2 km away</span> • <span className="open-green">Open</span>
-                    </div>
-                  </div>
-                  <div className="place-rating-badge">★ 4.2</div>
-                </div>
-              </div>
-
-              <button className="btn-column-action" onClick={() => handleTabClick('pharmacies')}>
-                <MapPin size={16} /> Find More Pharmacies
-              </button>
-            </div>
-
-            {/* COLUMN 3: TOP RATED HOSPITALS */}
-            <div className="dashboard-column-card">
-              <div className="column-card-header">
-                <h3>Top Rated Hospitals</h3>
-                <button className="link-view-all" onClick={() => handleTabClick('hospitals')}>View All</button>
-              </div>
-              <div className="places-list">
-                <div className="place-list-item">
-                  <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=120&auto=format&fit=crop&q=80" alt="Manipal" className="place-thumb" />
-                  <div className="place-list-info">
-                    <h4>Manipal Hospital</h4>
-                    <div className="place-subtext">
-                      <span>1.2 km away</span> • <span>Multi-speciality</span>
-                    </div>
-                  </div>
-                  <div className="place-rating-badge">★ 4.8</div>
-                </div>
-
-                <div className="place-list-item">
-                  <img src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=120&auto=format&fit=crop&q=80" alt="Apollo Hospital" className="place-thumb" />
-                  <div className="place-list-info">
-                    <h4>Apollo Hospitals</h4>
-                    <div className="place-subtext">
-                      <span>2.1 km away</span> • <span>Multi-speciality</span>
-                    </div>
-                  </div>
-                  <div className="place-rating-badge">★ 4.6</div>
-                </div>
-
-                <div className="place-list-item">
-                  <img src="https://images.unsplash.com/photo-1512678080530-7760d81faba6?w=120&auto=format&fit=crop&q=80" alt="Fortis" className="place-thumb" />
-                  <div className="place-list-info">
-                    <h4>Fortis Hospital</h4>
-                    <div className="place-subtext">
-                      <span>2.7 km away</span> • <span>Multi-speciality</span>
-                    </div>
-                  </div>
-                  <div className="place-rating-badge">★ 4.5</div>
-                </div>
-
-                <div className="place-list-item">
-                  <img src="https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=120&auto=format&fit=crop&q=80" alt="Narayana" className="place-thumb" />
-                  <div className="place-list-info">
-                    <h4>Narayana Health</h4>
-                    <div className="place-subtext">
-                      <span>3.4 km away</span> • <span>Multi-speciality</span>
-                    </div>
-                  </div>
-                  <div className="place-rating-badge">★ 4.4</div>
-                </div>
-              </div>
-
-              <button className="btn-column-action" onClick={() => handleTabClick('hospitals')}>
-                <Building2 size={16} /> View All Hospitals
-              </button>
-            </div>
-          </div>
-
-          {/* BOTTOM ROW: FEATURED MEDICINES & HEALTH TIP BANNER */}
-          <div className="bottom-sections-grid">
-            
-            {/* FEATURED MEDICINES CAROUSEL */}
-            <div className="featured-medicines-card">
-              <div className="column-card-header">
-                <h3>Featured Medicines</h3>
-                <div className="header-actions">
-                  <button className="link-view-all" onClick={() => handleTabClick('search-medicine')}>View All</button>
-                  <div className="carousel-nav-btns">
-                    <button className="btn-carousel" aria-label="Previous"><ChevronLeft size={16} /></button>
-                    <button className="btn-carousel" aria-label="Next"><ChevronRight size={16} /></button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="medicines-horizontal-grid">
-                {/* Product 1 */}
-                <div className="medicine-product-card">
-                  <div className="product-image-box">
-                    <div className="med-box-mock dolo">
-                      <span>Dolo 650</span>
-                    </div>
-                  </div>
-                  <div className="product-details">
-                    <h4>Dolo 650mg Tablet</h4>
-                    <div className="product-price-row">
-                      <span className="price">₹18.50</span>
-                      <span className="pack">10 Tablets</span>
-                    </div>
-                    <button 
-                      className={`btn-add-save ${savedItems.includes(1) ? 'saved' : ''}`}
-                      onClick={() => toggleSaveMedicine(1)}
-                    >
-                      <Bookmark size={14} />
-                      <span>{savedItems.includes(1) ? 'Saved' : 'Add to Save'}</span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Product 2 */}
-                <div className="medicine-product-card">
-                  <div className="product-image-box">
-                    <div className="med-box-mock amox">
-                      <span>Amoxicillin 500mg</span>
-                    </div>
-                  </div>
-                  <div className="product-details">
-                    <h4>Amoxicillin 500mg</h4>
-                    <div className="product-price-row">
-                      <span className="price">₹42.30</span>
-                      <span className="pack">10 Capsules</span>
-                    </div>
-                    <button 
-                      className={`btn-add-save ${savedItems.includes(2) ? 'saved' : ''}`}
-                      onClick={() => toggleSaveMedicine(2)}
-                    >
-                      <Bookmark size={14} />
-                      <span>{savedItems.includes(2) ? 'Saved' : 'Add to Save'}</span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Product 3 */}
-                <div className="medicine-product-card">
-                  <div className="product-image-box">
-                    <div className="med-box-mock vit">
-                      <span>Vitamin D3K</span>
-                    </div>
-                  </div>
-                  <div className="product-details">
-                    <h4>Vitamin D3 60K</h4>
-                    <div className="product-price-row">
-                      <span className="price">₹76.00</span>
-                      <span className="pack">4 Tablets</span>
-                    </div>
-                    <button 
-                      className={`btn-add-save ${savedItems.includes(3) ? 'saved' : ''}`}
-                      onClick={() => toggleSaveMedicine(3)}
-                    >
-                      <Bookmark size={14} />
-                      <span>{savedItems.includes(3) ? 'Saved' : 'Add to Save'}</span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Product 4 */}
-                <div className="medicine-product-card">
-                  <div className="product-image-box">
-                    <div className="med-box-mock calc">
-                      <span>Calcium + D3</span>
-                    </div>
-                  </div>
-                  <div className="product-details">
-                    <h4>Calcium + D3</h4>
-                    <div className="product-price-row">
-                      <span className="price">₹95.00</span>
-                      <span className="pack">15 Tablets</span>
-                    </div>
-                    <button 
-                      className={`btn-add-save ${savedItems.includes(4) ? 'saved' : ''}`}
-                      onClick={() => toggleSaveMedicine(4)}
-                    >
-                      <Bookmark size={14} />
-                      <span>{savedItems.includes(4) ? 'Saved' : 'Add to Save'}</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* HEALTH TIP OF THE DAY BANNER */}
-            <div className="health-tip-banner">
-              <h3>Health Tip of the Day</h3>
-              <p className="tip-quote">
-                "Stay hydrated, eat healthy, and take your medicines on time. Your health is your wealth."
-              </p>
               
-              <div className="tip-3d-graphic">
-                <div className="shield-icon-3d">
-                  <Plus size={28} className="shield-cross" />
-                </div>
-                <div className="pill-bottle-3d" />
-              </div>
+              {recentSearches.length > 0 && (
+                <button 
+                  className="btn-clear-history"
+                  onClick={() => {
+                    if (window.confirm('Are you sure you want to clear your recent searches?')) {
+                      setRecentSearches([]);
+                    }
+                  }}
+                >
+                  <X size={16} /> Clear History
+                </button>
+              )}
+            </div>
 
-              <button className="btn-learn-more" onClick={() => alert('Health Tip: Drinking 3 liters of water daily improves energy and digestion!')}>
-                <span>Learn More</span>
-                <ArrowRight size={16} />
-              </button>
+            {/* List of Recent Searches */}
+            {recentSearches.length > 0 ? (
+              <div className="recent-searches-grid-list">
+                {recentSearches.map((item) => (
+                  <div key={item.id} className="recent-search-row-card">
+                    <div className={`search-type-icon ${item.bg}`}>
+                      {item.icon}
+                    </div>
+
+                    <div className="search-row-details">
+                      <div className="search-title-tag">
+                        <h4>{item.query}</h4>
+                        <span className={`type-badge ${item.bg}`}>{item.type}</span>
+                      </div>
+                      <div className="search-meta-text">
+                        <span>{item.category}</span> • <span className="time-text"><Clock size={12} /> {item.time}</span>
+                      </div>
+                    </div>
+
+                    <div className="search-row-actions">
+                      <button 
+                        className="btn-search-again"
+                        onClick={() => {
+                          if (item.type === 'Hospital') onNavigateToPage('hospitals');
+                          else if (item.type === 'Pharmacy') onNavigateToPage('pharmacies');
+                          else onNavigateToPage('search-medicine');
+                        }}
+                      >
+                        <span>Search Again</span>
+                        <ArrowRight size={16} />
+                      </button>
+
+                      <button 
+                        className="btn-remove-item"
+                        onClick={() => setRecentSearches(recentSearches.filter(s => s.id !== item.id))}
+                        title="Remove from history"
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="empty-searches-state">
+                <Search size={48} className="empty-icon" />
+                <h4>No Recent Searches Found</h4>
+                <p>Start searching for medicines, hospitals, or pharmacies to see your history here.</p>
+                <button className="btn-primary-action" onClick={() => onNavigateToPage('search-medicine')}>
+                  Search Medicine Now
+                </button>
+              </div>
+            )}
+
+            {/* Quick Categories Footer */}
+            <div className="recent-searches-footer">
+              <span className="footer-label">Quick Search Categories:</span>
+              <div className="category-tags-list">
+                <button onClick={() => onNavigateToPage('search-medicine')} className="tag-btn">💊 Medicines</button>
+                <button onClick={() => onNavigateToPage('hospitals')} className="tag-btn">🏥 Best Hospitals</button>
+                <button onClick={() => onNavigateToPage('pharmacies')} className="tag-btn">🏪 Near Pharmacies</button>
+                <button onClick={() => onNavigateToPage('emergency')} className="tag-btn">🚨 Emergency Services</button>
+              </div>
             </div>
           </div>
 
