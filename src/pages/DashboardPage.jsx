@@ -21,14 +21,15 @@ export default function DashboardPage({ user, onLogout, onNavigateToPage }) {
   const [isDetectingLocation, setIsDetectingLocation] = useState(false);
 
   const popularCities = [
+    'Bhagalpur, Bihar',
     'Patna, Bihar',
+    'Gaya, Bihar',
+    'Muzaffarpur, Bihar',
+    'Darbhanga, Bihar',
     'New Delhi, Delhi',
     'Mumbai, Maharashtra',
     'Bangalore, Karnataka',
     'Kolkata, West Bengal',
-    'Hyderabad, Telangana',
-    'Chennai, Tamil Nadu',
-    'Pune, Maharashtra',
     'Ranchi, Jharkhand',
     'Lucknow, Uttar Pradesh'
   ];
@@ -52,22 +53,52 @@ export default function DashboardPage({ user, onLogout, onNavigateToPage }) {
       alert('Geolocation is not supported by your browser.');
       return;
     }
+
     setIsDetectingLocation(true);
+
     navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const lat = position.coords.latitude.toFixed(2);
-        const lon = position.coords.longitude.toFixed(2);
-        setLocation(`Lat: ${lat}°, Lon: ${lon}° (Live Location)`);
-        setIsDetectingLocation(false);
-        setShowLocationModal(false);
+      async (position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+
+        try {
+          // Reverse geocoding via BigDataCloud client API (free, fast, CORS-friendly)
+          const response = await fetch(
+            `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`
+          );
+          const data = await response.json();
+
+          const city = data.city || data.locality || data.localityInfo?.administrative?.[2]?.name || data.localityInfo?.administrative?.[1]?.name;
+          const state = data.principalSubdivision || data.localityInfo?.administrative?.[0]?.name || 'Bihar';
+
+          if (city) {
+            setLocation(`${city}, ${state}`);
+          } else {
+            // Backup reverse geocoding via OpenStreetMap Nominatim
+            const osmResp = await fetch(
+              `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+            );
+            const osmData = await osmResp.json();
+            const addr = osmData.address || {};
+            const detectedCity = addr.city || addr.town || addr.village || addr.county || addr.suburb || 'Bhagalpur';
+            const detectedState = addr.state || 'Bihar';
+            setLocation(`${detectedCity}, ${detectedState}`);
+          }
+        } catch (err) {
+          console.warn('Reverse geocode error:', err);
+          // Fallback formatting if network is restricted
+          setLocation('Bhagalpur, Bihar');
+        } finally {
+          setIsDetectingLocation(false);
+          setShowLocationModal(false);
+        }
       },
       (error) => {
-        console.warn(error);
+        console.warn('Geolocation error:', error);
         setIsDetectingLocation(false);
-        setLocation('Kankarbagh, Patna (Live GPS)');
-        setShowLocationModal(false);
+        alert('Could not detect live location. Please allow location permissions in your browser or select Bhagalpur manually.');
       },
-      { timeout: 5000 }
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
   };
 
