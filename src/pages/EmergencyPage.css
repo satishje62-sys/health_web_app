@@ -1,0 +1,740 @@
+.emergency-body-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+}
+
+/* TOP EMERGENCY GRID (SOS CALL CARD + HOSPITALS & MAP) */
+.top-emergency-grid {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 24px;
+}
+
+/* SOS CALL CARD */
+.sos-call-card {
+  background: #FFF1F2;
+  border: 1px solid #FECDD3;
+  border-radius: 24px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+}
+
+.sos-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #9F1239;
+}
+
+.sos-sub {
+  font-size: 13px;
+  color: #BE123C;
+  margin-top: 2px;
+}
+
+/* MASSIVE PULSING RED SOS BUTTON */
+.sos-button-wrapper {
+  position: relative;
+  width: 170px;
+  height: 170px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 24px 0 16px 0;
+  cursor: pointer;
+}
+
+.btn-sos-trigger {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+  border: 6px solid #FFFFFF;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  box-shadow: 0 10px 30px rgba(220, 38, 38, 0.4);
+  z-index: 2;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.btn-sos-trigger:hover {
+  transform: scale(1.05);
+}
+
+.phone-sos-icon {
+  margin-top: 4px;
+}
+
+.sos-lbl-txt {
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.sos-pulse-ring-1, .sos-pulse-ring-2 {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid rgba(225, 29, 72, 0.4);
+  animation: sosPulse 2s infinite ease-out;
+}
+
+.sos-pulse-ring-1 {
+  width: 160px;
+  height: 160px;
+}
+
+.sos-pulse-ring-2 {
+  width: 180px;
+  height: 180px;
+  animation-delay: 0.5s;
+}
+
+@keyframes sosPulse {
+  0% { transform: scale(0.85); opacity: 0.8; }
+  100% { transform: scale(1.15); opacity: 0; }
+}
+
+.tap-hint-txt {
+  font-size: 13px;
+  font-weight: 800;
+  color: #9F1239;
+}
+
+.location-share-sub {
+  font-size: 11px;
+  color: #BE123C;
+  max-width: 220px;
+  margin-top: 4px;
+}
+
+.sos-legal-warning-box {
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid #FECDD3;
+  border-radius: 14px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  text-align: left;
+}
+
+.warning-icon {
+  color: #DC2626;
+  flex-shrink: 0;
+}
+
+.warning-text strong {
+  font-size: 12px;
+  color: #9F1239;
+  display: block;
+}
+
+.warning-text p {
+  font-size: 10px;
+  color: #BE123C;
+}
+
+/* HOSPITALS & MAP CARD */
+.hospitals-map-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+}
+
+.your-location-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #F8FAFC;
+  border: 1px solid var(--border-color);
+  padding: 10px 16px;
+  border-radius: 14px;
+}
+
+.loc-text-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #64748B;
+}
+
+.btn-change-loc {
+  background: transparent;
+  color: #1E60D5;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.hosp-map-split {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 20px;
+}
+
+.nearest-hospitals-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.col-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.col-header-row h4 {
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.hospitals-stack-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hosp-item-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #F8FAFC;
+  border-radius: 14px;
+  padding: 12px;
+}
+
+.num-badge {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #1E60D5;
+  color: #FFFFFF;
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hosp-details {
+  flex: 1;
+}
+
+.hosp-details h5 {
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.hosp-details span {
+  font-size: 11px;
+  color: #64748B;
+}
+
+.hosp-action-btns {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-h-call, .btn-h-dir {
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  color: #1E60D5;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+/* Live Emergency Map Preview */
+.live-emergency-map-col {
+  height: 200px;
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #DBEAFE;
+}
+
+.emergency-map-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.user-live-pulse-dot {
+  position: absolute;
+  top: 50%;
+  left: 65%;
+  transform: translate(-50%, -50%);
+}
+
+.dot-center {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #1E60D5;
+  border: 2px solid #FFFFFF;
+}
+
+.dot-pulse-ring {
+  position: absolute;
+  top: -14px;
+  left: -14px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(30, 96, 213, 0.25);
+  animation: mapPulse 2s infinite;
+}
+
+@keyframes mapPulse {
+  0% { transform: scale(0.5); opacity: 1; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+.hospital-pin {
+  position: absolute;
+  background: #DC2626;
+  color: #FFFFFF;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 10px;
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.hospital-pin.h1 { top: 20%; left: 75%; }
+.hospital-pin.h2 { top: 55%; left: 88%; }
+.hospital-pin.h3 { top: 80%; left: 70%; }
+
+.map-place-lbl {
+  position: absolute;
+  font-size: 9px;
+  font-weight: 700;
+  color: #64748B;
+}
+
+.map-place-lbl.boring { top: 30%; left: 10%; }
+.map-place-lbl.station { top: 50%; left: 40%; }
+.map-place-lbl.kankarbagh { top: 75%; left: 10%; }
+
+/* 4 QUICK ACTION CARDS */
+.emergency-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.quick-action-card {
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.quick-action-card.blue { background: #EFF6FF; border: 1px solid #BFDBFE; }
+.quick-action-card.red { background: #FFF1F2; border: 1px solid #FECDD3; }
+.quick-action-card.green { background: #E6F9F0; border: 1px solid #A7F3D0; }
+.quick-action-card.purple { background: #F3E8FF; border: 1px solid #E9D5FF; }
+
+.qa-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.qa-icon-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qa-icon-circle.blue { background: #DBEAFE; color: #1E60D5; }
+.qa-icon-circle.red { background: #FFE4E6; color: #E11D48; }
+.qa-icon-circle.green { background: #D1FAE5; color: #059669; }
+.qa-icon-circle.purple { background: #F3E8FF; color: #9333EA; }
+
+.qa-text h4 { font-size: 13px; font-weight: 800; }
+.qa-text p { font-size: 10px; color: #64748B; }
+
+.qa-number-big {
+  font-size: 22px;
+  font-weight: 900;
+  color: #1E60D5;
+}
+
+.red-txt { color: #DC2626 !important; }
+.green-txt { color: #059669 !important; }
+.purple-txt { color: #9333EA !important; }
+
+.btn-qa-action {
+  width: 100%;
+  padding: 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.btn-qa-action.blue { background: #1E60D5; color: #FFFFFF; }
+.btn-qa-action.red-btn { background: #FFFFFF; border: 1px solid #DC2626; color: #DC2626; }
+.btn-qa-action.green-btn { background: #FFFFFF; border: 1px solid #059669; color: #059669; }
+.btn-qa-action.purple-btn { background: #FFFFFF; border: 1px solid #9333EA; color: #9333EA; }
+
+/* MIDDLE 3 COLUMNS SECTION */
+.middle-three-cols-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.middle-col-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+}
+
+.card-top-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-top-header h4 {
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.col-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.middle-item-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #F8FAFC;
+  border-radius: 12px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.plus-green-badge {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: #E6F9F0;
+  color: #059669;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.droplet-red-badge {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: #FFF1F2;
+  color: #E11D48;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.item-text-info { flex: 1; }
+.item-text-info h5 { font-size: 12px; font-weight: 800; }
+.item-text-info span { font-size: 10px; color: #64748B; }
+
+.btn-icon-call {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #EFF6FF;
+  border: none;
+  color: #1E60D5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.helpline-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 12px;
+}
+
+.hl-num-call {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* QUICK DIRECTIONS BANNER */
+.quick-directions-banner {
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  border-radius: 20px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.banner-left-route {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.car-blue-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: #1E60D5;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.route-text-block h4 {
+  font-size: 16px;
+  font-weight: 800;
+  color: #1E3A8A;
+}
+
+.route-from-to-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: #475569;
+  margin-top: 4px;
+}
+
+.btn-get-directions-banner {
+  background: #1E60D5;
+  color: #FFFFFF;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+/* STAY SAFE BANNER */
+.stay-safe-banner {
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+}
+
+.stay-safe-banner h4 {
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.safe-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.safe-step-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #F8FAFC;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.step-icon.red {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #FFF1F2;
+  color: #E11D48;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.step-icon.blue {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #EFF6FF;
+  color: #1E60D5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* BOTTOM RED SAFETY BANNER */
+.bottom-red-safety-banner {
+  background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%);
+  border-radius: 24px;
+  padding: 20px 28px;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  box-shadow: 0 10px 24px rgba(220, 38, 38, 0.25);
+}
+
+.shield-icon-badge-red {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.banner-text h3 { font-size: 18px; font-weight: 800; }
+.banner-text p { font-size: 12px; color: rgba(255, 255, 255, 0.85); }
+
+.btn-save-emergency-page {
+  background: #FFFFFF;
+  color: #DC2626;
+  padding: 10px 20px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 800;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.btn-save-emergency-page small {
+  font-size: 9px;
+  color: #64748B;
+  font-weight: 600;
+}
+
+/* SOS MODAL */
+.sos-modal-card {
+  background: #FFFFFF;
+  border-radius: 28px;
+  padding: 36px;
+  max-width: 440px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+}
+
+.sos-alert-ring-animation {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #DC2626;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 12px rgba(220, 38, 38, 0.2);
+  animation: alertRing 1.5s infinite;
+}
+
+@keyframes alertRing {
+  0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.5); }
+  100% { box-shadow: 0 0 0 20px rgba(220, 38, 38, 0); }
+}
+
+.sos-status-box {
+  background: #F8FAFC;
+  border-radius: 14px;
+  padding: 14px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-cancel-sos {
+  background: #EF4444;
+  color: #FFFFFF;
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+@media (max-width: 1100px) {
+  .top-emergency-grid { grid-template-columns: 1fr; }
+  .hosp-map-split { grid-template-columns: 1fr; }
+  .emergency-actions-grid { grid-template-columns: repeat(2, 1fr); }
+  .middle-three-cols-grid { grid-template-columns: 1fr; }
+  .safe-steps-grid { grid-template-columns: repeat(2, 1fr); }
+}

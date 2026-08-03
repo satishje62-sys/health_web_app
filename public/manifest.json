@@ -1,0 +1,22 @@
+{
+  "short_name": "MediNear",
+  "name": "MediNear - Health & Emergency App",
+  "description": "Find medicines, nearby pharmacies, best hospitals, and 24x7 emergency medical help instantly.",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2966/2966327.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2966/2966327.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#1E60D5",
+  "theme_color": "#1E60D5",
+  "display": "standalone",
+  "orientation": "portrait"
+}

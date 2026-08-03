@@ -1,0 +1,924 @@
+.my-reviews-layout {
+  min-height: 100vh;
+  width: 100%;
+  background: #F8FAFC;
+  font-family: var(--font-family);
+  color: var(--text-main);
+}
+
+/* TOP HEADER BAR */
+.reviews-header {
+  background: #1E60D5;
+  color: #FFFFFF;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.brand-logo-text {
+  font-size: 22px;
+  font-weight: 800;
+  color: #FFFFFF;
+}
+
+.text-green-bright {
+  color: #00C853;
+}
+
+.header-search-box {
+  display: flex;
+  align-items: center;
+  background: #FFFFFF;
+  border-radius: var(--radius-pill);
+  padding: 8px 16px;
+  gap: 10px;
+  width: 100%;
+  max-width: 440px;
+}
+
+.header-search-box input {
+  border: none;
+  outline: none;
+  background: transparent;
+  flex: 1;
+  font-size: 13px;
+  color: var(--text-main);
+}
+
+.search-icon {
+  color: #64748B;
+}
+
+.header-location-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+.header-right-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.icon-bell-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  position: relative;
+}
+
+.badge-count {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: #EF4444;
+  color: #FFFFFF;
+  font-size: 10px;
+  font-weight: 800;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-profile-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.user-profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* SUB NAVIGATION TAB BAR */
+.sub-nav-bar {
+  background: #FFFFFF;
+  border-bottom: 1px solid var(--border-color);
+  padding: 0;
+}
+
+.sub-nav-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 54px;
+}
+
+.btn-back-link {
+  background: transparent;
+  color: #64748B;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-back-link:hover {
+  color: #1E60D5;
+}
+
+.sub-nav-tabs {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.sub-tab {
+  background: transparent;
+  color: #64748B;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 16px 0;
+  position: relative;
+}
+
+.sub-tab.active {
+  color: #1E60D5;
+  font-weight: 800;
+}
+
+.sub-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #1E60D5;
+  border-radius: 3px 3px 0 0;
+}
+
+.btn-appointment-cta {
+  background: #1E60D5;
+  color: #FFFFFF;
+  padding: 8px 20px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 800;
+  box-shadow: 0 4px 12px rgba(30, 96, 213, 0.25);
+}
+
+/* MAIN CONTAINER */
+.main-reviews-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-top: 24px;
+  padding-bottom: 60px;
+}
+
+/* HOSPITAL BANNER CARD */
+.hospital-banner-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.banner-left-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.hosp-thumb {
+  width: 64px;
+  height: 64px;
+  border-radius: 14px;
+  object-fit: cover;
+}
+
+.hosp-text-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hosp-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hosp-name-row h2 {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.verified-blue {
+  color: #1E60D5;
+}
+
+.hosp-subtext {
+  font-size: 13px;
+  color: #64748B;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.banner-right-rating {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.rating-score-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rating-score-box .score {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1;
+}
+
+.stars-gold {
+  color: #F59E0B;
+  font-size: 14px;
+}
+
+.reviews-lbl {
+  font-size: 12px;
+  color: #64748B;
+}
+
+.btn-write-review {
+  background: #FFFFFF;
+  border: 1.5px solid #1E60D5;
+  color: #1E60D5;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-write-review:hover {
+  background: #EFF6FF;
+}
+
+/* WRITE A REVIEW FORM CARD */
+.write-review-form-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03);
+}
+
+.form-header h3 {
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.form-header p {
+  font-size: 13px;
+  color: #64748B;
+  margin-top: 2px;
+}
+
+.review-submitted-banner {
+  background: #E6F9F0;
+  color: #059669;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 12px 18px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-rating-picker-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-rating-picker-block label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.stars-picker-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.star-pick-icon {
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.star-pick-icon:hover {
+  transform: scale(1.15);
+}
+
+.active-star {
+  color: #F59E0B;
+  fill: #F59E0B;
+}
+
+.empty-star {
+  color: #CBD5E1;
+}
+
+.rating-score-tag {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-left: 8px;
+}
+
+.rating-quality-badge {
+  background: #E6F9F0;
+  color: #059669;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 10px;
+}
+
+/* Textarea Block */
+.form-textarea-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+}
+
+.form-textarea-block label {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.form-textarea-block textarea {
+  background: #F8FAFC;
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 14px;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  resize: vertical;
+}
+
+.char-counter {
+  align-self: flex-end;
+  font-size: 11px;
+  color: #94A3B8;
+  margin-top: 4px;
+}
+
+/* Photos Upload Block */
+.form-photos-upload-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-photos-upload-block label {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.sub-hint {
+  font-size: 11px;
+  color: #64748B;
+}
+
+.photos-upload-grid {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.btn-upload-photos-box {
+  width: 100px;
+  height: 80px;
+  border-radius: 14px;
+  background: #EFF6FF;
+  border: 1.5px dashed #1E60D5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: #1E60D5;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.uploaded-photo-item {
+  width: 100px;
+  height: 80px;
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+}
+
+.uploaded-photo-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.btn-remove-photo {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.7);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-add-more-box {
+  width: 100px;
+  height: 80px;
+  border-radius: 14px;
+  background: #F8FAFC;
+  border: 1.5px dashed #CBD5E1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: #64748B;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* Bottom Form Actions */
+.form-bottom-actions-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+}
+
+.visited-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.visited-checkbox-label input {
+  width: 16px;
+  height: 16px;
+  accent-color: #1E60D5;
+}
+
+.action-btns-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-cancel {
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  color: #475569;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.btn-submit-review {
+  background: #1E60D5;
+  color: #FFFFFF;
+  padding: 10px 24px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 800;
+  box-shadow: 0 4px 14px rgba(30, 96, 213, 0.25);
+}
+
+/* REVIEWS TWO COLUMNS GRID */
+.reviews-two-columns-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 24px;
+}
+
+/* LEFT FEED */
+.reviews-feed-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.feed-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 16px 20px;
+}
+
+.feed-title {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.feed-sort-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #64748B;
+}
+
+.feed-sort-dropdown select {
+  border: none;
+  outline: none;
+  font-weight: 700;
+  color: var(--text-main);
+  background: transparent;
+  cursor: pointer;
+}
+
+/* REVIEWS LIST STACK */
+.reviews-list-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.review-card-item {
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card-top-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.author-avatar-img {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.author-info-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.name-verified-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.author-name {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.verified-green-tag {
+  background: #E6F9F0;
+  color: #059669;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.author-stats {
+  font-size: 12px;
+  color: #64748B;
+}
+
+.btn-more-options {
+  margin-left: auto;
+  background: transparent;
+  color: #94A3B8;
+}
+
+.rating-date-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.stars-gold-row {
+  color: #F59E0B;
+}
+
+.rating-num-val {
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.dot-sep {
+  color: #CBD5E1;
+}
+
+.date-txt {
+  color: #64748B;
+}
+
+.new-badge-pill {
+  background: #EFF6FF;
+  color: #1E60D5;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+.review-body-text {
+  font-size: 14px;
+  color: #475569;
+  line-height: 1.6;
+}
+
+.review-photos-grid {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.rev-photo-thumb {
+  width: 90px;
+  height: 65px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.extra-photos-overlay-box {
+  width: 90px;
+  height: 65px;
+  border-radius: 10px;
+  background: #F1F5F9;
+  color: #64748B;
+  font-size: 14px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-bottom-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-light);
+}
+
+.btn-helpful-action, .btn-report-action {
+  background: transparent;
+  color: #64748B;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-helpful-action:hover, .btn-report-action:hover {
+  color: #1E60D5;
+}
+
+.pipe-sep {
+  color: #E2E8F0;
+}
+
+/* RIGHT SIDEBAR */
+.reviews-sidebar-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sidebar-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.card-heading {
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.rating-big-score-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.big-score {
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.score-text-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.stars-gold-sm {
+  color: #F59E0B;
+  font-size: 13px;
+}
+
+.quality-lbl {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.based-count-lbl {
+  font-size: 12px;
+  color: #64748B;
+}
+
+.rating-progress-bars-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  color: #64748B;
+}
+
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bar-track {
+  flex: 1;
+  height: 6px;
+  background: #F1F5F9;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  background: #1E60D5;
+  border-radius: 3px;
+}
+
+/* Rate Other Places */
+.visited-places-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.place-item-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #F8FAFC;
+  border-radius: 12px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.place-item-row:hover {
+  background: #EFF6FF;
+}
+
+.place-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.place-icon-box.green { background: #E6F9F0; color: #059669; }
+.place-icon-box.blue { background: #EFF6FF; color: #1E60D5; }
+
+.place-info h5 { font-size: 13px; font-weight: 800; }
+.place-info span { font-size: 11px; color: #64748B; }
+
+.btn-view-visited-places {
+  background: #FFFFFF;
+  border: 1px solid #1E60D5;
+  color: #1E60D5;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* Filter Radio Group */
+.filter-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.radio-label-title {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #64748B;
+  cursor: pointer;
+}
+
+.radio-option input {
+  accent-color: #1E60D5;
+}
+
+@media (max-width: 1000px) {
+  .hospital-banner-card { flex-direction: column; align-items: flex-start; }
+  .reviews-two-columns-grid { grid-template-columns: 1fr; }
+}
