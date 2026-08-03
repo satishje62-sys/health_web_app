@@ -20,6 +20,16 @@ export default function DashboardPage({ user, onLogout, onNavigateToPage }) {
   const [customLocationInput, setCustomLocationInput] = useState('');
   const [isDetectingLocation, setIsDetectingLocation] = useState(false);
 
+  // Recent Searches State
+  const [recentSearches, setRecentSearches] = useState([
+    { id: 1, query: 'Paracetamol 650mg', type: 'Medicine', category: 'Fever & Pain Relief', time: '10 mins ago', icon: <Pill size={20} />, bg: 'blue' },
+    { id: 2, query: 'Dolo 650 Tablet', type: 'Medicine', category: 'Analgesic', time: '1 hour ago', icon: <Pill size={20} />, bg: 'blue' },
+    { id: 3, query: 'AIIMS Patna', type: 'Hospital', category: 'Government Multi-Speciality', time: '3 hours ago', icon: <Building2 size={20} />, bg: 'purple' },
+    { id: 4, query: 'Apollo Pharmacy', type: 'Pharmacy', category: '24/7 Medical Shop', time: 'Yesterday', icon: <Store size={20} />, bg: 'green' },
+    { id: 5, query: 'Amoxicillin 500mg', type: 'Medicine', category: 'Antibiotic', time: '2 days ago', icon: <Pill size={20} />, bg: 'blue' },
+    { id: 6, query: 'Vitamin D3 60K', type: 'Medicine', category: 'Supplements', time: '3 days ago', icon: <Pill size={20} />, bg: 'orange' }
+  ]);
+
   const popularCities = [
     'Bhagalpur, Bihar',
     'Patna, Bihar',
