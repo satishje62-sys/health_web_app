@@ -264,7 +264,7 @@ export default function HospitalsListPage({ user, onNavigateToPage, onLogout, on
           <p className="page-subtitle">Search and compare hospitals to get the best care possible.</p>
         </div>
         <div className="location-info-badge">
-          <span>Showing 25 hospitals near <strong>Patna, Bihar</strong></span>
+          <span>Showing 25 hospitals near <strong>{location}</strong></span>
           <MapPin size={16} className="text-blue" />
         </div>
       </div>
