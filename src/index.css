@@ -1,3 +1,5 @@
+@import 'leaflet/dist/leaflet.css';
+
 /* Global Design System & Variables */
 :root {
   --primary-blue: #1E60D5;

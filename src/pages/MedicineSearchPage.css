@@ -877,3 +877,599 @@
   border-color: #BFDBFE;
   transform: translateY(-1px);
 }
+
+/* ============================================
+   NEW STORE-SEARCH RESULT STYLES
+   ============================================ */
+
+/* Search go button inside search bar */
+.btn-search-go {
+  background: linear-gradient(135deg, #1E60D5, #00C853);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 22px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+.btn-search-go:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(30, 96, 213, 0.3);
+}
+
+/* Popular search section */
+.popular-searches-section {
+  margin: 28px 0;
+  animation: fadeUp 0.4s ease;
+}
+
+/* ===============================================
+   PREMIUM SEARCH BAR — Medicine Search Page
+   =============================================== */
+
+.search-filter-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.search-input-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #FFFFFF;
+  border: 2.5px solid #E2E8F0;
+  border-radius: 18px;
+  padding: 16px 22px;
+  box-shadow: 0 4px 28px rgba(30, 96, 213, 0.09), 0 1px 4px rgba(0,0,0,0.04);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  position: relative;
+}
+
+.search-input-group:focus-within {
+  border-color: #1E60D5;
+  box-shadow:
+    0 0 0 4px rgba(30, 96, 213, 0.10),
+    0 8px 36px rgba(30, 96, 213, 0.16);
+}
+
+.search-icon {
+  color: #1E60D5;
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+}
+
+.search-input-group input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  font-weight: 500;
+  color: #0F172A;
+  background: transparent;
+  font-family: inherit;
+  min-width: 0;
+}
+
+.search-input-group input::placeholder {
+  color: #94A3B8;
+  font-weight: 400;
+}
+
+.quick-filter-chips {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.chip-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #F8FAFC;
+  border: 1.5px solid #E2E8F0;
+  color: #475569;
+  border-radius: 40px;
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.chip-btn:hover {
+  background: #EFF6FF;
+  border-color: #93C5FD;
+  color: #1E60D5;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(30, 96, 213, 0.12);
+}
+
+.chip-btn.active {
+  background: linear-gradient(135deg, #1E60D5 0%, #2563EB 100%);
+  border-color: #1E60D5;
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px rgba(30, 96, 213, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-gps-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 40px;
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  white-space: nowrap;
+}
+
+.btn-gps-trigger:hover:not(:disabled) {
+  background: linear-gradient(135deg, #1E60D5 0%, #00C853 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(30, 96, 213, 0.3);
+}
+
+.btn-gps-trigger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+.popular-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #475569;
+  margin-bottom: 12px;
+}
+.popular-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.popular-chip {
+  background: #EFF6FF;
+  color: #1E60D5;
+  border: 1.5px solid #BFDBFE;
+  border-radius: 20px;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.popular-chip:hover {
+  background: #1E60D5;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(30, 96, 213, 0.25);
+}
+
+.store-count-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #F0FDF4, #EFF6FF);
+  border: 1.5px solid #BBFCCC;
+  border-radius: 12px;
+  padding: 14px 20px;
+  color: #1E4D2B;
+  font-size: 14px;
+  font-weight: 600;
+}
+.store-count-banner svg {
+  color: #00C853;
+  flex-shrink: 0;
+}
+
+/* Results wrapper */
+.medicine-results-wrapper {
+  animation: fadeUp 0.4s ease;
+}
+
+.results-summary-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 12px 18px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #475569;
+}
+.stores-found-count {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #1E60D5;
+  font-weight: 600;
+}
+
+/* Medicine + Stores block */
+.medicine-store-result-block {
+  background: #FFFFFF;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 18px;
+  margin-bottom: 28px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s ease;
+}
+.medicine-store-result-block:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.10);
+}
+
+/* Medicine header in result block */
+.med-result-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 22px 24px;
+  background: linear-gradient(135deg, #F0F9FF 0%, #F0FDF4 100%);
+  border-bottom: 1.5px solid #E2E8F0;
+  gap: 16px;
+}
+.med-info-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+.med-thumb-sm {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 2px solid #E2E8F0;
+  flex-shrink: 0;
+}
+.med-result-name {
+  font-size: 18px;
+  font-weight: 800;
+  color: #0F172A;
+  margin-bottom: 4px;
+}
+.med-result-generic {
+  font-size: 13px;
+  color: #64748B;
+  margin-bottom: 8px;
+}
+.med-result-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.tag-category {
+  background: #EFF6FF;
+  color: #1E60D5;
+  border: 1px solid #BFDBFE;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.tag-rx {
+  background: #FFF7ED;
+  color: #C2410C;
+  border: 1px solid #FED7AA;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.tag-stock.in {
+  background: #F0FDF4;
+  color: #166534;
+  border: 1px solid #BBF7D0;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.tag-stock.out {
+  background: #FFF1F2;
+  color: #9F1239;
+  border: 1px solid #FECDD3;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.med-price-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+.med-result-price {
+  font-size: 24px;
+  font-weight: 800;
+  color: #0F172A;
+}
+.med-result-mrp {
+  font-size: 12px;
+  color: #94A3B8;
+  text-decoration: line-through;
+}
+.med-result-disc {
+  font-size: 12px;
+  font-weight: 700;
+  color: #00C853;
+  background: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  padding: 2px 8px;
+  border-radius: 20px;
+  margin-top: 4px;
+}
+
+/* Stores list section */
+.stores-list-section {
+  padding: 20px 24px;
+}
+.stores-list-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 16px;
+}
+.stores-list-label svg {
+  color: #1E60D5;
+}
+.stores-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+/* Individual Store Card */
+.store-card {
+  background: #F8FAFC;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 16px;
+  transition: all 0.25s ease;
+}
+.store-card:hover {
+  border-color: #93C5FD;
+  box-shadow: 0 4px 16px rgba(30, 96, 213, 0.1);
+  transform: translateY(-2px);
+}
+.store-card.store-closed {
+  opacity: 0.7;
+}
+.store-card-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.store-logo-circle {
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, #EFF6FF, #F0FDF4);
+  border: 1.5px solid #BFDBFE;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+.store-name-block {
+  flex: 1;
+  min-width: 0;
+}
+.store-name {
+  font-size: 15px;
+  font-weight: 800;
+  color: #0F172A;
+  margin-bottom: 2px;
+  line-height: 1.3;
+}
+.store-type {
+  font-size: 11px;
+  color: #64748B;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.store-open-badge.open {
+  font-size: 11px;
+  font-weight: 700;
+  color: #166534;
+  background: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  border-radius: 20px;
+  padding: 3px 10px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.store-open-badge.closed {
+  font-size: 11px;
+  font-weight: 700;
+  color: #9F1239;
+  background: #FFF1F2;
+  border: 1px solid #FECDD3;
+  border-radius: 20px;
+  padding: 3px 10px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.store-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 12px;
+}
+.store-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #475569;
+}
+.store-meta-row svg {
+  color: #94A3B8;
+  flex-shrink: 0;
+}
+.store-distance {
+  font-weight: 700;
+  color: #1E60D5;
+}
+.store-time-sep {
+  color: #CBD5E1;
+}
+
+.store-rating-delivery {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.store-stars-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.rating-value {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0F172A;
+  margin-left: 4px;
+}
+.rating-count {
+  font-size: 11px;
+  color: #94A3B8;
+  margin-left: 2px;
+}
+.delivery-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #EFF6FF;
+  color: #1E60D5;
+  border: 1px solid #BFDBFE;
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.store-card-actions {
+  display: flex;
+  gap: 8px;
+}
+.btn-call-store {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #F8FAFC;
+  border: 1.5px solid #CBD5E1;
+  color: #334155;
+  border-radius: 10px;
+  padding: 9px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 1;
+  justify-content: center;
+}
+.btn-call-store:hover {
+  background: #EFF6FF;
+  border-color: #93C5FD;
+  color: #1E60D5;
+}
+.btn-directions-store {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #1E60D5, #00C853);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 9px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  flex: 1;
+  justify-content: center;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+.btn-directions-store:hover {
+  opacity: 0.95;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(30, 96, 213, 0.3);
+}
+
+/* No results */
+.no-results-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 60px 20px;
+  text-align: center;
+  color: #64748B;
+}
+.no-results-box h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0F172A;
+}
+.no-results-box p {
+  font-size: 14px;
+}
+.text-orange { color: #F97316; }
+
+/* Reservation success */
+.reservation-success-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 0;
+  text-align: center;
+}
+.text-green { color: #00C853; }
+.reserve-token-box {
+  background: #F0FDF4;
+  border: 1.5px solid #BBF7D0;
+  border-radius: 10px;
+  padding: 12px 20px;
+  font-size: 14px;
+  color: #166534;
+}
+.store-reserve-name {
+  font-size: 12px;
+  color: #64748B;
+  margin-top: 2px;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+

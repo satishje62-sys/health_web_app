@@ -1,9 +1,159 @@
-.pharmacies-list-layout {
+.pharmacies-list-layout, .pharmacies-list-page {
   min-height: 100vh;
   width: 100%;
   background: #F8FAFC;
   font-family: var(--font-family);
   color: var(--text-main);
+}
+
+/* View Toggle Buttons */
+.view-toggle-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  padding: 4px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.view-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.view-toggle-btn.active {
+  background: #1E60D5;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(30, 96, 213, 0.25);
+}
+
+.loading-state-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  color: #1E60D5;
+  padding: 14px 20px;
+  border-radius: var(--radius-md);
+  margin-bottom: 20px;
+  font-size: 0.94rem;
+  font-weight: 600;
+}
+
+.map-view-container {
+  margin-bottom: 30px;
+}
+
+.pharmacy-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.btn-gmaps-direct {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #10B981;
+  color: #ffffff;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-gmaps-direct:hover {
+  background: #059669;
+}
+
+.btn-call-direct {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #F1F5F9;
+  color: #0F172A;
+  border: 1px solid #CBD5E1;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-call-direct:hover {
+  background: #E2E8F0;
+}
+
+.search-results-list {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+.search-item-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  border-bottom: 1px solid #f1f5f9;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.search-item-row:hover {
+  background: #eff6ff;
+}
+
+.search-item-row .item-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.search-item-row .item-sub {
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.btn-detect-gps-large {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #00C853;
+  color: #ffffff;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-detect-gps-large:hover {
+  background: #00A844;
 }
 
 /* TOP HEADER BAR */
@@ -571,3 +721,132 @@
   .main-pharmacies-container { grid-template-columns: 1fr; }
   .filters-sidebar { display: none; }
 }
+
+/* ===============================================
+   PREMIUM SEARCH BAR — Near Pharmacy Page
+   =============================================== */
+
+.search-filter-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.search-input-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #FFFFFF;
+  border: 2.5px solid #E2E8F0;
+  border-radius: 18px;
+  padding: 16px 22px;
+  box-shadow: 0 4px 24px rgba(30, 96, 213, 0.08), 0 1px 4px rgba(0,0,0,0.04);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  position: relative;
+}
+
+.search-input-group:focus-within {
+  border-color: #00C853;
+  box-shadow: 0 0 0 4px rgba(0, 200, 83, 0.10), 0 8px 32px rgba(0, 200, 83, 0.12);
+}
+
+.search-icon {
+  color: #00C853;
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+}
+
+.search-input-group input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  font-weight: 500;
+  color: #0F172A;
+  background: transparent;
+  font-family: inherit;
+  min-width: 0;
+}
+
+.search-input-group input::placeholder {
+  color: #94A3B8;
+  font-weight: 400;
+}
+
+.quick-filter-chips {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.chip-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #F8FAFC;
+  border: 1.5px solid #E2E8F0;
+  color: #475569;
+  border-radius: 40px;
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.chip-btn:hover {
+  background: #F0FDF4;
+  border-color: #86EFAC;
+  color: #166534;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(0, 200, 83, 0.12);
+}
+
+.chip-btn.active {
+  background: linear-gradient(135deg, #00C853 0%, #059669 100%);
+  border-color: #00C853;
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px rgba(0, 200, 83, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-gps-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 40px;
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  white-space: nowrap;
+}
+
+.btn-gps-trigger:hover:not(:disabled) {
+  background: linear-gradient(135deg, #00C853 0%, #059669 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0, 200, 83, 0.3);
+}
+
+.btn-gps-trigger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.spin-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+

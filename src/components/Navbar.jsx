@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   Search, MapPin, Activity, User, LogIn, Menu, X, Shield, Plus, 
-  Home, Building2, Store, Star, PhoneCall, Headphones, ArrowRight 
+  Home, Building2, Store, Headphones, ArrowRight 
 } from 'lucide-react';
 import './Navbar.css';
 
@@ -13,9 +13,7 @@ export default function Navbar({ onOpenAuth, activePage, setActivePage }) {
     { id: 'search-medicine', label: 'Search Medicine', icon: <Search size={20} /> },
     { id: 'hospitals', label: 'Best Hospitals', icon: <Building2 size={20} /> },
     { id: 'pharmacies', label: 'Near Pharmacy', icon: <Store size={20} /> },
-    { id: 'reviews', label: 'My Reviews', icon: <Star size={20} /> },
     { id: 'profile', label: 'User Profile', icon: <User size={20} /> },
-    { id: 'emergency', label: 'Emergency Services', icon: <PhoneCall size={20} /> },
   ];
 
   const handleNavClick = (id) => {
@@ -148,19 +146,13 @@ export default function Navbar({ onOpenAuth, activePage, setActivePage }) {
               </button>
             </div>
 
-            {/* Emergency Support Banner in Sidebar */}
+            {/* Support Banner in Sidebar */}
             <div className="sidebar-drawer-footer">
               <div className="sidebar-support-box">
                 <div className="support-title">
                   <Headphones size={18} className="text-green" /> 24/7 Health Support
                 </div>
-                <p>Facing a medical emergency? Call urgent services directly.</p>
-                <button 
-                  className="btn-emergency-sidebar"
-                  onClick={() => handleNavClick('emergency')}
-                >
-                  <PhoneCall size={16} /> Emergency 108
-                </button>
+                <p>Our team is available round the clock for assistance.</p>
               </div>
             </div>
           </aside>

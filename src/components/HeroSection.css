@@ -12,11 +12,94 @@
   align-items: center;
 }
 
-/* Left Hero Content */
-.hero-content {
+/* Location Pill Styles */
+.location-pill-container {
   display: flex;
-  flex-direction: column;
-  gap: 24px;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.location-active-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  color: #1E60D5;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.pin-active-icon {
+  color: #1E60D5;
+}
+
+.btn-gps-detect {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #00C853;
+  color: #ffffff;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 0.84rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-gps-detect:hover {
+  background: #00A844;
+  transform: translateY(-1px);
+}
+
+.spin-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.location-inline-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  border-left: 1px solid #e2e8f0;
+}
+
+.loc-input-icon {
+  color: #64748b;
+}
+
+.location-inline-input {
+  border: none;
+  outline: none;
+  font-size: 0.85rem;
+  width: 130px;
+  background: transparent;
+  color: #0f172a;
+}
+
+.location-results-dropdown {
+  position: absolute;
+  top: 105%;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.12);
+  z-index: 100;
+  overflow: hidden;
+  max-height: 280px;
+  overflow-y: auto;
 }
 
 .hero-title {

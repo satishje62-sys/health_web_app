@@ -2,35 +2,43 @@ import React, { useState } from 'react';
 import { 
   Plus, Search, MapPin, Bell, ChevronDown, CheckCircle2, Phone, 
   Navigation, ArrowRight, Filter, RotateCcw, ChevronLeft, ChevronRight,
-  ShieldCheck, Home, Building2, Pill, Activity, User, SlidersHorizontal, Menu, X
+  ShieldCheck, Home, Building2, Pill, Activity, User, SlidersHorizontal, Menu, X,
+  Map, LayoutGrid, Loader2, ExternalLink, LocateFixed
 } from 'lucide-react';
 import SidebarDrawer from '../components/SidebarDrawer';
+import InteractiveMap from '../components/InteractiveMap';
+import { useLocationContext } from '../context/LocationContext';
 import './HospitalsListPage.css';
 
 export default function HospitalsListPage({ user, onNavigateToPage, onLogout, onSelectHospital }) {
+  const {
+    location,
+    detectLocation,
+    isDetectingLocation,
+    nearbyHospitals,
+    isLoadingPlaces,
+    searchLocations,
+    searchResults,
+    selectSearchResult,
+    setCustomLocation
+  } = useLocationContext();
+
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSpeciality, setSelectedSpeciality] = useState('All Specialities');
-  const [selectedRating, setSelectedRating] = useState('4.0+');
-  const [distanceKm, setDistanceKm] = useState(25);
+  const [selectedRating, setSelectedRating] = useState('All Ratings');
   const [emergencyOnly, setEmergencyOnly] = useState(false);
-  const [hospitalType, setHospitalType] = useState({ government: false, private: false, trust: false });
-  const [sortBy, setSortBy] = useState('Relevance');
-  const [currentPageNum, setCurrentPageNum] = useState(1);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  // Working Location Selector States & Functions
-  const [location, setLocation] = useState('Bhagalpur, Bihar');
+  const [icuOnly, setIcuOnly] = useState(false);
+  const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'map'
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [customLocationInput, setCustomLocationInput] = useState('');
-  const [isDetectingLocation, setIsDetectingLocation] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showFiltersSidebar, setShowFiltersSidebar] = useState(false);
 
   const popularCities = [
-    'Bhagalpur, Bihar',
     'Patna, Bihar',
+    'Bhagalpur, Bihar',
     'Gaya, Bihar',
     'Muzaffarpur, Bihar',
-    'Darbhanga, Bihar',
     'New Delhi, Delhi',
     'Mumbai, Maharashtra',
     'Bangalore, Karnataka',
@@ -40,587 +48,342 @@ export default function HospitalsListPage({ user, onNavigateToPage, onLogout, on
   ];
 
   const handleSelectCity = (city) => {
-    setLocation(city);
+    setCustomLocation(city);
     setShowLocationModal(false);
   };
 
   const handleSaveCustomLocation = (e) => {
     e.preventDefault();
     if (customLocationInput.trim()) {
-      setLocation(customLocationInput.trim());
+      setCustomLocation(customLocationInput.trim());
       setCustomLocationInput('');
       setShowLocationModal(false);
     }
   };
 
-  const handleDetectCurrentLocation = () => {
-    if (!navigator.geolocation) {
-      alert('Geolocation is not supported by your browser.');
-      return;
-    }
+  // Filter Hospitals by Search Query, Emergency, ICU, Speciality
+  const filteredHospitals = nearbyHospitals.filter((hospital) => {
+    const matchesSearch =
+      hospital.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      hospital.address.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (hospital.type && hospital.type.toLowerCase().includes(searchQuery.toLowerCase()));
 
-    setIsDetectingLocation(true);
+    const matchesEmergency = emergencyOnly ? hospital.emergency : true;
+    const matchesIcu = icuOnly ? hospital.icu : true;
 
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        const lat = position.coords.latitude;
-        const lon = position.coords.longitude;
-
-        try {
-          const response = await fetch(
-            `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`
-          );
-          const data = await response.json();
-
-          const city = data.city || data.locality || data.localityInfo?.administrative?.[2]?.name || data.localityInfo?.administrative?.[1]?.name;
-          const state = data.principalSubdivision || data.localityInfo?.administrative?.[0]?.name || 'Bihar';
-
-          if (city) {
-            setLocation(`${city}, ${state}`);
-          } else {
-            const osmResp = await fetch(
-              `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
-            );
-            const osmData = await osmResp.json();
-            const addr = osmData.address || {};
-            const detectedCity = addr.city || addr.town || addr.village || addr.county || addr.suburb || 'Bhagalpur';
-            const detectedState = addr.state || 'Bihar';
-            setLocation(`${detectedCity}, ${detectedState}`);
-          }
-        } catch (err) {
-          console.warn('Reverse geocode error:', err);
-          setLocation('Bhagalpur, Bihar');
-        } finally {
-          setIsDetectingLocation(false);
-          setShowLocationModal(false);
-        }
-      },
-      (error) => {
-        console.warn('Geolocation error:', error);
-        setIsDetectingLocation(false);
-        alert('Could not detect live location. Please allow location permissions in your browser or select Bhagalpur manually.');
-      },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-    );
-  };
-
-  const hospitalsData = [
-    {
-      id: 'aiims-patna',
-      name: 'AIIMS Patna',
-      type: 'Government',
-      verified: true,
-      rating: 4.6,
-      reviewsCount: '1,245 reviews',
-      distance: '2.3 km',
-      address: 'Phulwarisharif, Patna, Bihar 801505',
-      doctorsCount: '245+ Doctors Available',
-      emergency: true,
-      icu: true,
-      image: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=500&auto=format&fit=crop&q=80',
-      phone: '+91 612 245 1000'
-    },
-    {
-      id: 'paras-hmri',
-      name: 'Paras HMRI Hospital',
-      type: 'Private',
-      verified: true,
-      rating: 4.4,
-      reviewsCount: '890 reviews',
-      distance: '4.7 km',
-      address: 'Boring Road, Patna, Bihar 800001',
-      doctorsCount: '180+ Doctors Available',
-      emergency: true,
-      icu: true,
-      image: 'https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=500&auto=format&fit=crop&q=80',
-      phone: '+91 612 710 7777'
-    },
-    {
-      id: 'indira-ivf',
-      name: 'Indira IVF Hospital',
-      type: 'Private',
-      verified: true,
-      rating: 4.2,
-      reviewsCount: '567 reviews',
-      distance: '6.1 km',
-      address: 'Kankarbagh, Patna, Bihar 800020',
-      doctorsCount: '95+ Doctors Available',
-      emergency: true,
-      icu: true,
-      image: 'https://images.unsplash.com/photo-1512678080530-7760d81faba6?w=500&auto=format&fit=crop&q=80',
-      phone: '+91 612 300 5555'
-    },
-    {
-      id: 'pmch-patna',
-      name: 'Patna Medical College & Hospital',
-      type: 'Government',
-      verified: true,
-      rating: 4.1,
-      reviewsCount: '2,103 reviews',
-      distance: '3.8 km',
-      address: 'Kankarbagh, Patna, Bihar 800020',
-      doctorsCount: '300+ Doctors Available',
-      emergency: true,
-      icu: true,
-      image: 'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=500&auto=format&fit=crop&q=80',
-      phone: '+91 612 230 0080'
-    }
-  ];
-
-  const resetFilters = () => {
-    setSelectedSpeciality('All Specialities');
-    setSelectedRating('4.0+');
-    setDistanceKm(25);
-    setEmergencyOnly(false);
-    setHospitalType({ government: false, private: false, trust: false });
-  };
-
-  const handleHospitalClick = (hospital) => {
-    if (onSelectHospital) {
-      onSelectHospital(hospital);
-    }
-  };
+    return matchesSearch && matchesEmergency && matchesIcu;
+  });
 
   return (
-    <div className="hospitals-list-layout">
-      {/* SLIDE-OUT SIDEBAR DRAWER (Only opens when 3-line button is clicked) */}
+    <div className="hospitals-list-page">
+      {/* Sidebar Drawer Panel */}
       <SidebarDrawer 
-        isOpen={isSidebarOpen}
-        onClose={() => setIsSidebarOpen(false)}
-        user={user}
-        onLogout={onLogout}
-        onNavigateToPage={onNavigateToPage}
+        isOpen={isSidebarOpen} 
+        onClose={() => setIsSidebarOpen(false)} 
+        onNavigateToPage={onNavigateToPage} 
         activePage="hospitals"
       />
 
-      {/* STICKY TOPBAR HEADER */}
-      <header className="hospitals-top-header">
+      {/* Top Header Navbar */}
+      <header className="page-header-nav">
         <div className="container header-container">
-          <div className="topbar-left-brand-group">
-            {/* 3-LINE HAMBURGER MENU BUTTON */}
+          <div className="header-left">
             <button 
-              className="topbar-3line-toggle"
+              className="sidebar-toggle-btn"
               onClick={() => setIsSidebarOpen(true)}
-              title="Click to Open Menu Sidebar"
-              aria-label="Open Sidebar Menu"
+              title="Open Navigation Menu"
             >
               <Menu size={24} />
             </button>
 
-            {/* Brand Logo */}
-            <div className="brand-logo-group" onClick={() => onNavigateToPage('home')}>
-              <div className="brand-logo-badge">
-                <Plus className="brand-cross-icon" />
+            <div className="brand-logo" onClick={() => onNavigateToPage('home')}>
+              <div className="logo-cross-badge">
+                <Plus size={18} className="logo-cross" />
               </div>
-              <span className="brand-logo-text">
-                Medi<span className="text-green-bright">Near</span>
-              </span>
+              <span className="logo-text">Medi<span className="text-green">Near</span></span>
             </div>
           </div>
 
-          {/* Global Search Bar */}
-          <div className="header-search-box">
-            <Search size={18} className="search-icon" />
+          {/* Location Selector Pill */}
+          <div className="location-selector-pill" onClick={() => setShowLocationModal(true)}>
+            <MapPin size={18} className="location-icon" />
+            <div className="location-info">
+              <span className="location-label">Location (Live GPS)</span>
+              <span className="location-value">{location.name}</span>
+            </div>
+            <ChevronDown size={16} className="chevron-icon" />
+          </div>
+
+          {/* Header Right Actions */}
+          <div className="header-right">
+            <button className="icon-action-btn" title="Notifications">
+              <Bell size={20} />
+            </button>
+            
+            {user ? (
+              <div className="user-profile-chip" onClick={() => onNavigateToPage('profile')}>
+                <div className="user-avatar">
+                  {user.name ? user.name.charAt(0) : 'U'}
+                </div>
+                <div className="user-details">
+                  <span className="user-name">{user.name}</span>
+                  <span className="user-role">{user.role || 'Member'}</span>
+                </div>
+              </div>
+            ) : (
+              <button className="btn-login-small" onClick={() => onNavigateToPage('login')}>
+                Login
+              </button>
+            )}
+          </div>
+        </div>
+      </header>
+
+      {/* Main Page Layout */}
+      <main className="container page-content-container">
+        {/* Breadcrumb & Section Title Bar */}
+        <div className="page-title-banner">
+          <div>
+            <div className="breadcrumb-trail">
+              <span onClick={() => onNavigateToPage('home')}>Home</span> / <span className="active">Hospitals</span>
+            </div>
+            <h1 className="main-heading">
+              Best Hospitals Near <span className="text-blue">{location.name}</span>
+            </h1>
+            <p className="sub-heading">
+              {isLoadingPlaces ? (
+                'Fetching live hospital nodes from Google Maps & OpenStreetMap...'
+              ) : (
+                `Found ${filteredHospitals.length} verified hospitals & clinics within your range.`
+              )}
+            </p>
+          </div>
+
+          {/* Grid vs Map View Toggle */}
+          <div className="view-toggle-container">
+            <button 
+              className={`view-toggle-btn ${viewMode === 'grid' ? 'active' : ''}`}
+              onClick={() => setViewMode('grid')}
+            >
+              <LayoutGrid size={16} /> Grid Cards
+            </button>
+            <button 
+              className={`view-toggle-btn ${viewMode === 'map' ? 'active' : ''}`}
+              onClick={() => setViewMode('map')}
+            >
+              <Map size={16} /> Interactive Map
+            </button>
+          </div>
+        </div>
+
+        {/* Search Bar & Filters Trigger */}
+        <div className="search-filter-bar">
+          <div className="search-input-group">
+            <Search size={20} className="search-icon" />
             <input 
               type="text" 
-              placeholder="Search hospitals, locations, specialties..." 
+              placeholder={`Search hospitals, ICU, emergency near ${location.name}...`}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
 
-          {/* Right Controls: Location, Notifications, User Profile */}
-          <div className="header-right-controls">
-            {/* Location Selector Pill */}
-            <div 
-              className="location-pill-selector" 
-              onClick={() => setShowLocationModal(true)}
-              title="Click to Change Location"
+          <div className="quick-filter-chips">
+            <button 
+              className={`chip-btn ${emergencyOnly ? 'active' : ''}`}
+              onClick={() => setEmergencyOnly(!emergencyOnly)}
             >
-              <MapPin size={16} className="text-blue" />
-              <span>{location}</span>
-              <ChevronDown size={14} className="arrow" />
-            </div>
-
-            <button className="bell-icon-btn" aria-label="Notifications">
-              <Bell size={20} />
-              <span className="bell-dot" />
+              🚨 24/7 Emergency
             </button>
 
-            <div className="user-profile-avatar" onClick={() => onNavigateToPage('dashboard')}>
-              <img 
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80" 
-                alt="User Avatar" 
-              />
-            </div>
+            <button 
+              className={`chip-btn ${icuOnly ? 'active' : ''}`}
+              onClick={() => setIcuOnly(!icuOnly)}
+            >
+              🏥 ICU Available
+            </button>
+
+            <button className="btn-gps-trigger" onClick={detectLocation} disabled={isDetectingLocation}>
+              {isDetectingLocation ? <Loader2 size={16} className="spin-icon" /> : <LocateFixed size={16} />}
+              Refetch Live GPS
+            </button>
           </div>
         </div>
-      </header>
 
-      {/* PAGE HERO HEADER & SUBTITLE */}
-      <div className="container hospitals-hero-section">
-        <div className="title-area">
-          <h1 className="page-main-title">Find the Best Hospitals Near You</h1>
-          <p className="page-subtitle">Search and compare hospitals to get the best care possible.</p>
-        </div>
-        <div className="location-info-badge">
-          <span>Showing 25 hospitals near <strong>{location}</strong></span>
-          <MapPin size={16} className="text-blue" />
-        </div>
-      </div>
-
-      {/* MAIN CONTAINER: SIDEBAR FILTERS + RIGHT HOSPITAL LIST */}
-      <div className="container main-hospitals-container">
-        
-        {/* LEFT SIDEBAR FILTERS PANEL (Hidden by default, toggleable via Filter button) */}
-        {showFiltersSidebar && (
-          <aside className="filters-sidebar animate-fade-in">
-            <div className="filters-sidebar-header">
-              <div className="flex items-center gap-2">
-                <Filter size={18} className="text-blue" />
-                <h3>Filters</h3>
-              </div>
-              <div className="flex items-center gap-2">
-                <button className="btn-reset-link" onClick={resetFilters}>Reset</button>
-                <button className="btn-close-filter-mobile" onClick={() => setShowFiltersSidebar(false)}>
-                  <X size={18} />
-                </button>
-              </div>
-            </div>
-
-            {/* Filter 1: Speciality Dropdown */}
-            <div className="filter-block">
-              <label className="filter-label">Speciality</label>
-              <div className="custom-select-box">
-                <select 
-                  value={selectedSpeciality} 
-                  onChange={(e) => setSelectedSpeciality(e.target.value)}
-                >
-                  <option value="All Specialities">All Specialities</option>
-                  <option value="Cardiology">Cardiology</option>
-                  <option value="Neurology">Neurology</option>
-                  <option value="Orthopedics">Orthopedics</option>
-                  <option value="Pediatrics">Pediatrics</option>
-                  <option value="Gynecology">Gynecology</option>
-                </select>
-                <ChevronDown size={16} className="select-arrow" />
-              </div>
-            </div>
-
-            {/* Filter 2: Rating Pills */}
-            <div className="filter-block">
-              <label className="filter-label">Rating</label>
-              <div className="rating-pills-grid">
-                {['4.0+', '3.5+', '3.0+', '2.0+'].map((rate) => (
-                  <button 
-                    key={rate}
-                    className={`rating-pill-btn ${selectedRating === rate ? 'active' : ''}`}
-                    onClick={() => setSelectedRating(rate)}
-                  >
-                    {rate} ★
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Filter 3: Distance Slider */}
-            <div className="filter-block">
-              <div className="label-with-value">
-                <label className="filter-label">Distance</label>
-                <span className="val-badge">{distanceKm} km</span>
-              </div>
-              <input 
-                type="range" 
-                min="1" 
-                max="25" 
-                value={distanceKm} 
-                onChange={(e) => setDistanceKm(Number(e.target.value))}
-                className="distance-range-slider"
-              />
-              <div className="range-min-max">
-                <span>0 km</span>
-                <span>25 km</span>
-              </div>
-            </div>
-
-            {/* Filter 4: Emergency 24/7 */}
-            <div className="filter-block">
-              <label className="toggle-switch-row">
-                <span>24/7 Emergency Only</span>
-                <input 
-                  type="checkbox" 
-                  checked={emergencyOnly}
-                  onChange={(e) => setEmergencyOnly(e.target.checked)}
-                />
-              </label>
-            </div>
-
-            {/* Filter 5: Hospital Type */}
-            <div className="filter-block">
-              <label className="filter-label">Hospital Type</label>
-              <div className="checkbox-list">
-                <label className="checkbox-item">
-                  <input 
-                    type="checkbox" 
-                    checked={hospitalType.government}
-                    onChange={(e) => setHospitalType({ ...hospitalType, government: e.target.checked })}
-                  />
-                  <span>Government</span>
-                </label>
-                <label className="checkbox-item">
-                  <input 
-                    type="checkbox" 
-                    checked={hospitalType.private}
-                    onChange={(e) => setHospitalType({ ...hospitalType, private: e.target.checked })}
-                  />
-                  <span>Private</span>
-                </label>
-                <label className="checkbox-item">
-                  <input 
-                    type="checkbox" 
-                    checked={hospitalType.trust}
-                    onChange={(e) => setHospitalType({ ...hospitalType, trust: e.target.checked })}
-                  />
-                  <span>Trust / NGO</span>
-                </label>
-              </div>
-            </div>
-
-            {/* Apply Filters CTA */}
-            <button className="btn-apply-filters" onClick={() => alert('Filters applied successfully!')}>
-              <Filter size={16} /> Apply Filters
-            </button>
-          </aside>
+        {/* Loading Indicator */}
+        {isLoadingPlaces && (
+          <div className="loading-state-banner">
+            <Loader2 size={24} className="spin-icon text-blue" />
+            <span>Scanning live Google Maps & OpenStreetMap geospatial data for <strong>{location.name}</strong>...</span>
+          </div>
         )}
 
-        {/* RIGHT MAIN HOSPITAL CARDS STACK */}
-        <main className={`hospitals-main-content ${!showFiltersSidebar ? 'full-width-search' : ''}`}>
-          
-          {/* SORT & FILTER CONTROLS BAR */}
-          <div className="sort-controls-bar">
-            {/* Filter Sidebar Toggle Button */}
-            <button 
-              className={`btn-toggle-filters-trigger ${showFiltersSidebar ? 'active' : ''}`}
-              onClick={() => setShowFiltersSidebar(!showFiltersSidebar)}
-              title="Toggle Filters Panel"
-            >
-              <SlidersHorizontal size={18} />
-              <span>{showFiltersSidebar ? 'Hide Filters' : 'Filters'}</span>
-            </button>
-
-            <div className="sort-dropdown-box">
-              <span>Sort by: </span>
-              <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-                <option value="Relevance">Relevance</option>
-                <option value="Rating">Highest Rating</option>
-                <option value="Distance">Nearest Distance</option>
-              </select>
-              <ChevronDown size={14} />
-            </div>
+        {/* MAP VIEW */}
+        {viewMode === 'map' && (
+          <div className="map-view-container">
+            <InteractiveMap 
+              center={location}
+              userLocation={location}
+              markers={filteredHospitals.map(h => ({ ...h, isHospital: true }))}
+              title={`Live Hospitals & Emergency Centers around ${location.name}`}
+              height="580px"
+              zoom={13}
+            />
           </div>
+        )}
 
-          {/* 4 HOSPITAL LIST CARDS */}
-          <div className="hospitals-cards-list">
-            {hospitalsData.map((hospital) => (
-              <div 
-                key={hospital.id} 
-                className="hospital-item-card"
-                onClick={() => handleHospitalClick(hospital)}
-              >
-                
-                {/* Left Hospital Image */}
-                <div className="hospital-img-wrapper">
-                  <img src={hospital.image} alt={hospital.name} />
-                </div>
-
-                {/* Center Hospital Info */}
-                <div className="hospital-details-col">
-                  <div className="title-row">
-                    <h2 className="hospital-name">{hospital.name}</h2>
-                    <span className={`type-tag ${hospital.type.toLowerCase()}`}>{hospital.type}</span>
-                    {hospital.verified && <CheckCircle2 size={18} className="verified-blue" />}
-                    <span className="dist-right-tag"><MapPin size={14} /> {hospital.distance}</span>
-                  </div>
-
-                  <div className="rating-row">
-                    <span className="rating-num">{hospital.rating}</span>
-                    <div className="stars-group">★★★★★</div>
-                    <span className="reviews-txt">({hospital.reviewsCount})</span>
-                  </div>
-
-                  <div className="address-row">
-                    <MapPin size={14} className="text-gray" />
-                    <span>{hospital.address}</span>
-                  </div>
-
-                  <div className="doctors-row">
-                    <User size={14} className="text-gray" />
-                    <span>{hospital.doctorsCount}</span>
-                  </div>
-
-                  <div className="badges-status-row">
+        {/* GRID VIEW */}
+        {viewMode === 'grid' && (
+          <div className="hospitals-cards-grid">
+            {filteredHospitals.length > 0 ? (
+              filteredHospitals.map((hospital) => (
+                <div key={hospital.id} className="hospital-card hover-lift">
+                  <div className="card-image-box">
+                    <img src={hospital.image} alt={hospital.name} loading="lazy" />
+                    <div className="distance-badge">
+                      ⚡ {hospital.distance} away
+                    </div>
                     {hospital.emergency && (
-                      <span className="badge-status emergency">
-                        🚑 24x7 Emergency
-                      </span>
-                    )}
-                    {hospital.icu && (
-                      <span className="badge-status icu">
-                        🏥 ICU Available
-                      </span>
+                      <div className="emergency-badge">
+                        🚨 24/7 Emergency
+                      </div>
                     )}
                   </div>
-                </div>
 
-                {/* Right Action Buttons */}
-                <div className="hospital-actions-col">
-                  <div className="top-actions-row">
-                    <button 
-                      className="btn-hospital-call" 
-                      onClick={(e) => { e.stopPropagation(); alert(`Calling ${hospital.name} at ${hospital.phone}...`); }}
-                    >
-                      <Phone size={14} /> Call
-                    </button>
-                    <button 
-                      className="btn-hospital-directions"
-                      onClick={(e) => { e.stopPropagation(); alert(`Opening Directions to ${hospital.name}...`); }}
-                    >
-                      <Navigation size={14} /> Directions
-                    </button>
+                  <div className="card-body">
+                    <div className="card-header-row">
+                      <span className="hospital-type-tag">{hospital.type}</span>
+                      <span className="hospital-rating-tag">⭐ {hospital.rating}</span>
+                    </div>
+
+                    <h3 className="hospital-title">{hospital.name}</h3>
+
+                    <p className="hospital-address">
+                      <MapPin size={15} className="text-muted" /> {hospital.address}
+                    </p>
+
+                    <div className="hospital-facilities-list">
+                      <span className="facility-pill">{hospital.bedsAvailable || 'Beds Available'}</span>
+                      <span className="facility-pill">{hospital.doctorsCount || 'Doctors On Call'}</span>
+                      {hospital.icu && <span className="facility-pill icu">ICU ICU Ready</span>}
+                    </div>
+
+                    <div className="hospital-card-actions">
+                      <a 
+                        href={hospital.directionsUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="btn-gmaps-direct"
+                        title="Get directions on Google Maps"
+                      >
+                        <Navigation size={15} /> Directions
+                      </a>
+
+                      {hospital.phone && (
+                        <a href={`tel:${hospital.phone}`} className="btn-call-direct">
+                          <Phone size={15} /> Call
+                        </a>
+                      )}
+
+                      <button 
+                        className="btn-view-details"
+                        onClick={() => onSelectHospital(hospital)}
+                      >
+                        Details <ArrowRight size={15} />
+                      </button>
+                    </div>
                   </div>
-
-                  <button className="btn-view-details">
-                    View Details <ArrowRight size={16} />
-                  </button>
                 </div>
-
-              </div>
-            ))}
-          </div>
-
-          {/* BOTTOM PAGINATION ROW */}
-          <div className="hospitals-pagination-bar">
-            <div className="pagination-controls">
-              <button className="btn-page-arrow" disabled={currentPageNum === 1} onClick={() => setCurrentPageNum(p => p - 1)}>
-                <ChevronLeft size={16} />
-              </button>
-              
-              {[1, 2, 3, 4, 5].map(num => (
-                <button 
-                  key={num}
-                  className={`btn-page-num ${currentPageNum === num ? 'active' : ''}`}
-                  onClick={() => setCurrentPageNum(num)}
-                >
-                  {num}
+              ))
+            ) : (
+              <div className="no-results-box">
+                <h3>No hospitals found matching your criteria near {location.name}</h3>
+                <p>Try clearing filters or search for another city/area.</p>
+                <button className="btn-gps-trigger" onClick={detectLocation}>
+                  Detect Current GPS Location
                 </button>
-              ))}
-              
-              <span className="dots">...</span>
-              <button className="btn-page-num" onClick={() => setCurrentPageNum(10)}>10</button>
-              
-              <button className="btn-page-arrow" onClick={() => setCurrentPageNum(p => p + 1)}>
-                <ChevronRight size={16} />
-              </button>
-            </div>
-
-            <div className="pagination-count-text">
-              Showing 1 to 25 of 234 hospitals
-            </div>
-          </div>
-
-        </main>
-      </div>
-
-      {/* LOCATION SELECTOR MODAL DIALOG */}
-      {showLocationModal && (
-        <>
-          {/* Backdrop Blur Overlay */}
-          <div 
-            className="location-modal-overlay animate-fade-in"
-            onClick={() => setShowLocationModal(false)}
-          />
-
-          {/* Modal Content Dialog */}
-          <div className="location-modal-card animate-scale-up">
-            {/* Modal Header */}
-            <div className="location-modal-header">
-              <div className="modal-header-brand">
-                <div className="location-badge-icon">
-                  <MapPin size={22} className="text-blue" />
-                </div>
-                <div>
-                  <h3 className="location-modal-title">Select Your Location</h3>
-                  <p className="location-modal-subtitle">
-                    Hospital distances & emergency services will be updated accordingly
-                  </p>
-                </div>
               </div>
-              <button 
-                className="location-modal-close" 
-                onClick={() => setShowLocationModal(false)}
-                aria-label="Close Location Modal"
-              >
-                <X size={20} />
-              </button>
-            </div>
+            )}
+          </div>
+        )}
+      </main>
 
-            <div className="location-modal-body">
-              {/* Option 1: Detect Live GPS Location */}
+      {/* Location Modal */}
+      {showLocationModal && (
+        <div className="modal-backdrop" onClick={() => setShowLocationModal(false)}>
+          <div className="location-modal-container animate-fade-in" onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Select Location / Search City</h3>
+              <button className="btn-close" onClick={() => setShowLocationModal(false)}>✕</button>
+            </div>
+            
+            <div className="modal-body">
               <button 
-                className="btn-detect-gps"
-                onClick={handleDetectCurrentLocation}
+                className="btn-detect-gps-large" 
+                onClick={() => {
+                  detectLocation();
+                  setShowLocationModal(false);
+                }}
                 disabled={isDetectingLocation}
               >
-                <Navigation size={18} className={isDetectingLocation ? 'spin-icon' : ''} />
-                <span>
-                  {isDetectingLocation ? 'Detecting your live location...' : 'Use Current Live GPS Location'}
-                </span>
+                {isDetectingLocation ? <Loader2 size={20} className="spin-icon" /> : <LocateFixed size={20} />}
+                Use My Current GPS Location
               </button>
 
-              <div className="location-modal-divider">
-                <span>OR ENTER MANUALLY</span>
-              </div>
+              <div className="divider-text">OR Search City/Area</div>
 
-              {/* Option 2: Custom Search Input Form */}
-              <form onSubmit={handleSaveCustomLocation} className="location-form">
-                <div className="location-input-group">
-                  <Search size={18} className="location-search-icon" />
-                  <input 
-                    type="text" 
-                    placeholder="Enter city, area or pincode (e.g. Bhagalpur, Patna)..."
-                    value={customLocationInput}
-                    onChange={(e) => setCustomLocationInput(e.target.value)}
-                    autoFocus
-                  />
-                </div>
-                <button 
-                  type="submit" 
-                  className="btn-set-location" 
-                  disabled={!customLocationInput.trim()}
-                >
-                  Set Location
-                </button>
+              <form onSubmit={handleSaveCustomLocation} className="custom-location-form">
+                <input 
+                  type="text" 
+                  placeholder="Enter city or area name (e.g. Patna, Delhi, Bhagalpur)"
+                  value={customLocationInput}
+                  onChange={(e) => {
+                    setCustomLocationInput(e.target.value);
+                    searchLocations(e.target.value);
+                  }}
+                />
+                <button type="submit" className="btn-save-loc">Set</button>
               </form>
 
-              {/* Option 3: Popular Cities Grid */}
-              <div className="popular-cities-wrapper">
-                <h4 className="popular-cities-title">Popular Cities & Towns</h4>
-                <div className="cities-chip-grid">
+              {searchResults.length > 0 && (
+                <div className="search-results-list">
+                  <div className="results-label">Matching Locations</div>
+                  {searchResults.map((item, idx) => (
+                    <div 
+                      key={idx}
+                      className="search-item-row"
+                      onClick={() => {
+                        selectSearchResult(item);
+                        setShowLocationModal(false);
+                      }}
+                    >
+                      <MapPin size={16} className="text-blue" />
+                      <div>
+                        <div className="item-title">{item.displayName}</div>
+                        <div className="item-sub">{item.fullAddress}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="popular-cities-section">
+                <div className="popular-cities-label">Popular Indian Cities</div>
+                <div className="popular-cities-chips">
                   {popularCities.map((city) => (
                     <button 
-                      key={city}
+                      key={city} 
+                      className={`city-chip ${location.name === city ? 'active' : ''}`}
                       onClick={() => handleSelectCity(city)}
-                      className={`city-chip-btn ${location === city ? 'active' : ''}`}
                     >
-                      <MapPin size={13} />
-                      <span>{city}</span>
+                      {city}
                     </button>
                   ))}
                 </div>
               </div>
             </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

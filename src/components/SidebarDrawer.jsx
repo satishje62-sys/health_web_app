@@ -1,8 +1,9 @@
 import React from 'react';
 import { 
-  Home, LayoutDashboard, Search, Building2, Store, Star, User, PhoneCall, 
-  LogOut, X, Plus, Headphones, ShieldCheck, ChevronRight 
+  Home, LayoutDashboard, Search, Building2, Store, User,
+  LogOut, X, Plus, Headphones, ChevronRight 
 } from 'lucide-react';
+
 import './SidebarDrawer.css';
 
 export default function SidebarDrawer({ isOpen, onClose, user, onLogout, onNavigateToPage, activePage }) {
@@ -14,9 +15,7 @@ export default function SidebarDrawer({ isOpen, onClose, user, onLogout, onNavig
     { id: 'search-medicine', label: 'Search Medicine', icon: <Search size={20} /> },
     { id: 'hospitals', label: 'Best Hospital', icon: <Building2 size={20} /> },
     { id: 'pharmacies', label: 'Near Pharmacy', icon: <Store size={20} /> },
-    { id: 'reviews', label: 'My Review', icon: <Star size={20} /> },
     { id: 'profile', label: 'Profile', icon: <User size={20} /> },
-    { id: 'emergency', label: 'Emergency', icon: <PhoneCall size={20} /> },
   ];
 
   const handleLinkClick = (id) => {
@@ -92,16 +91,6 @@ export default function SidebarDrawer({ isOpen, onClose, user, onLogout, onNavig
 
         {/* Emergency & Support Footer */}
         <div className="sidebar-drawer-bottom">
-          <div className="sidebar-emergency-box">
-            <div className="emergency-box-title">
-              <PhoneCall size={16} /> Medical Emergency?
-            </div>
-            <p>Connect with nearest hospital instantly.</p>
-            <button className="btn-call-108" onClick={() => handleLinkClick('emergency')}>
-              Call Emergency 108
-            </button>
-          </div>
-
           <div className="sidebar-support-box">
             <div className="support-title">
               <Headphones size={16} className="text-blue" /> 24/7 Help & Support
